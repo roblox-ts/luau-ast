@@ -28,6 +28,9 @@
 		"ttypescript": "^1.5.12",
 		"typescript-transform-paths": "^3.3.1"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"out",
 		"CHANGELOG.md",
