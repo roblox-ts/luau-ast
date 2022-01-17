@@ -1,0 +1,37 @@
+{
+	"name": "@roblox-ts/luau-ast",
+	"version": "1.0.0",
+	"description": "Luau AST + Renderer for roblox-ts",
+	"main": "out/LuauAST/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/roblox-ts/luau-ast.git"
+	},
+	"scripts": {
+		"prepublishOnly": "npm run build",
+		"build": "ttsc -b",
+		"build-watch": "ttsc -b -w",
+		"eslint": "eslint \"src/**/*.ts\" --max-warnings 0"
+	},
+	"author": "",
+	"license": "MIT",
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "^17.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.0.0",
+		"@typescript-eslint/parser": "^5.0.0",
+		"eslint": "^8.0.1",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-simple-import-sort": "^7.0.0",
+		"prettier": "^2.4.1",
+		"ttypescript": "^1.5.12",
+		"typescript-transform-paths": "^3.3.1"
+	},
+	"files": [
+		"out",
+		"CHANGELOG.md",
+		"!**/*.js.map",
+		"!**/*.tsbuildinfo"
+	]
+}
