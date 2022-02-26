@@ -30,6 +30,7 @@ const KIND_TO_VISITOR = identity<{ [K in luau.SyntaxKind]: VisitStrategy<K> }>({
 	[luau.SyntaxKind.ParenthesizedExpression]: (node, visitor) => visitNode(node.expression, visitor),
 
 	// expressions
+	[luau.SyntaxKind.None]: NOOP,
 	[luau.SyntaxKind.NilLiteral]: NOOP,
 	[luau.SyntaxKind.FalseLiteral]: NOOP,
 	[luau.SyntaxKind.TrueLiteral]: NOOP,

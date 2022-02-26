@@ -22,6 +22,7 @@ export function isIndexableExpression(node: luau.Node): node is luau.IndexableEx
 }
 
 // expressions
+export const isNone = makeGuard(luau.SyntaxKind.None);
 export const isNilLiteral = makeGuard(luau.SyntaxKind.NilLiteral);
 export const isFalseLiteral = makeGuard(luau.SyntaxKind.FalseLiteral);
 export const isTrueLiteral = makeGuard(luau.SyntaxKind.TrueLiteral);

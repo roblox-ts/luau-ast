@@ -11,6 +11,7 @@ export interface IndexableExpressionByKind {
 }
 
 export interface ExpressionByKind extends IndexableExpressionByKind {
+	[luau.SyntaxKind.None]: luau.None;
 	[luau.SyntaxKind.NilLiteral]: luau.NilLiteral;
 	[luau.SyntaxKind.FalseLiteral]: luau.FalseLiteral;
 	[luau.SyntaxKind.TrueLiteral]: luau.TrueLiteral;
