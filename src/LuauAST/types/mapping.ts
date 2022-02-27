@@ -1,6 +1,7 @@
 import luau from "LuauAST";
 
 export interface IndexableExpressionByKind {
+	[luau.SyntaxKind.None]: luau.None;
 	[luau.SyntaxKind.Identifier]: luau.Identifier;
 	[luau.SyntaxKind.TemporaryIdentifier]: luau.TemporaryIdentifier;
 	[luau.SyntaxKind.ComputedIndexExpression]: luau.ComputedIndexExpression;

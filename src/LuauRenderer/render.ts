@@ -1,4 +1,5 @@
 import luau from "LuauAST";
+import { assert } from "LuauAST/util/assert";
 import { getKindName } from "LuauAST/util/getKindName";
 import { renderCallExpression } from "LuauRenderer/nodes/expressions/indexable/renderCallExpression";
 import { renderComputedIndexExpression } from "LuauRenderer/nodes/expressions/indexable/renderComputedIndexExpression";
@@ -52,6 +53,7 @@ const KIND_TO_RENDERER = identity<{ [K in luau.SyntaxKind]: Renderer<K> }>({
 	[luau.SyntaxKind.ParenthesizedExpression]: renderParenthesizedExpression,
 
 	// expressions
+	[luau.SyntaxKind.None]: () => assert(false, "Cannot render None"),
 	[luau.SyntaxKind.NilLiteral]: () => "nil",
 	[luau.SyntaxKind.FalseLiteral]: () => "false",
 	[luau.SyntaxKind.TrueLiteral]: () => "true",

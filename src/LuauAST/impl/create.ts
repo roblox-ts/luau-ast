@@ -50,6 +50,13 @@ export function tempId(name = "") {
 }
 
 /**
+ * Creates a new `None` node.
+ */
+export function none() {
+	return luau.create(luau.SyntaxKind.None, {});
+}
+
+/**
  * Creates a new `nil` literal node.
  */
 export function nil() {

@@ -37,6 +37,8 @@ export type SimpleTypes =
 export type ExpressionWithPrecedence = luau.IfExpression | luau.UnaryExpression | luau.BinaryExpression;
 
 // expressions
+export interface None extends luau.Expression<luau.SyntaxKind.None> {}
+
 export interface NilLiteral extends luau.Expression<luau.SyntaxKind.NilLiteral> {}
 
 export interface FalseLiteral extends luau.Expression<luau.SyntaxKind.FalseLiteral> {}

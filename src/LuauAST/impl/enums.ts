@@ -9,6 +9,7 @@ export enum SyntaxKind {
 	ParenthesizedExpression,
 
 	// expressions
+	None,
 	NilLiteral,
 	FalseLiteral,
 	TrueLiteral,
