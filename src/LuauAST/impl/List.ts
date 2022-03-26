@@ -23,10 +23,12 @@ export namespace list {
 	// list creation functions
 
 	export function makeNode<T extends luau.Node>(value: T): luau.ListNode<T> {
+		assert(luau.isNode(value));
 		return { value };
 	}
 
 	export function make<T extends luau.Node>(...values: Array<T>): luau.List<T> {
+		assert(values.every(node => luau.isNode(node)));
 		if (values.length > 0) {
 			const head = luau.list.makeNode(values[0]);
 			let tail = head;
@@ -60,6 +62,7 @@ export namespace list {
 	}
 
 	export function push<T extends luau.Node>(list: luau.List<T>, value: NoInfer<T>) {
+		assert(luau.isNode(value));
 		assert(!list.readonly);
 		const node = luau.list.makeNode(value);
 		if (list.tail) {
@@ -104,6 +107,7 @@ export namespace list {
 	}
 
 	export function unshift<T extends luau.Node>(list: luau.List<T>, value: NoInfer<T>) {
+		assert(luau.isNode(value));
 		assert(!list.readonly);
 		const node = luau.list.makeNode(value);
 		if (list.head) {
