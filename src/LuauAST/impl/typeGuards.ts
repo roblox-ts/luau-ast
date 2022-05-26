@@ -1,3 +1,4 @@
+// must import bundle explicitly to get SyntaxKind importing correctly
 import * as luau from "LuauAST/bundle";
 
 function makeGuard<T extends keyof luau.NodeByKind>(...kinds: [...Array<T>]) {

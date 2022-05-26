@@ -1,4 +1,4 @@
-// helper creation
+// must import bundle explicitly to get `luau.create()` calls importing correctly
 import * as luau from "LuauAST/bundle";
 
 type AllowedFieldTypes = luau.BaseNode | luau.List<luau.BaseNode> | boolean | number | string | undefined;
