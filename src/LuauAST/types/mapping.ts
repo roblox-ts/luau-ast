@@ -51,3 +51,21 @@ export interface FieldByKind {
 }
 
 export interface NodeByKind extends luau.ExpressionByKind, luau.StatementByKind, luau.FieldByKind {}
+
+export type IndexableExpression<T extends luau.SyntaxKind = luau.SyntaxKind> = {
+	[K in keyof IndexableExpressionByKind]: IndexableExpressionByKind[K]["kind"] extends T
+		? IndexableExpressionByKind[K]
+		: never;
+}[keyof IndexableExpressionByKind];
+export type Expression<T extends luau.SyntaxKind = luau.SyntaxKind> = {
+	[K in keyof ExpressionByKind]: ExpressionByKind[K]["kind"] extends T ? ExpressionByKind[K] : never;
+}[keyof ExpressionByKind];
+export type Statement<T extends luau.SyntaxKind = luau.SyntaxKind> = {
+	[K in keyof StatementByKind]: StatementByKind[K]["kind"] extends T ? StatementByKind[K] : never;
+}[keyof StatementByKind];
+export type Field<T extends luau.SyntaxKind = luau.SyntaxKind> = {
+	[K in keyof FieldByKind]: FieldByKind[K]["kind"] extends T ? FieldByKind[K] : never;
+}[keyof FieldByKind];
+export type Node<T extends luau.SyntaxKind = luau.SyntaxKind> = {
+	[K in keyof NodeByKind]: NodeByKind[K]["kind"] extends T ? NodeByKind[K] : never;
+}[keyof NodeByKind];

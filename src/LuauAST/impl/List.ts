@@ -6,13 +6,13 @@ export type NoInfer<A extends any> = [A][A extends any ? 0 : never];
 
 const LIST_MARKER = Symbol("List");
 
-export type ListNode<T extends luau.Node> = {
+export type ListNode<T extends luau.BaseNode> = {
 	prev?: luau.ListNode<T>;
 	next?: luau.ListNode<T>;
 	value: T;
 };
 
-export type List<T extends luau.Node> = {
+export type List<T extends luau.BaseNode> = {
 	[LIST_MARKER]: true;
 	head?: luau.ListNode<T>;
 	tail?: luau.ListNode<T>;
