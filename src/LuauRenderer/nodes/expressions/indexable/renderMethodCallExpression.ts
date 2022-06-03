@@ -13,7 +13,7 @@ export function renderMethodCallExpression(state: RenderState, node: luau.Method
 		result += state.newline(`${objStr}:${node.name}(`);
 		result += state.block(() =>
 			renderArguments(state, node.args)
-				.map(a => state.line(a))
+				.map(arg => state.line(arg))
 				.join(""),
 		);
 		result += state.indented(")");

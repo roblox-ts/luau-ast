@@ -11,7 +11,7 @@ export function renderCallExpression(state: RenderState, node: luau.CallExpressi
 		result += state.newline(`${expStr}(`);
 		result += state.block(() =>
 			renderArguments(state, node.args)
-				.map(a => state.line(a))
+				.map(arg => state.line(arg))
 				.join(""),
 		);
 		result += state.indented(")");

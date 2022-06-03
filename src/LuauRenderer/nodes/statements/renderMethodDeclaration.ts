@@ -13,7 +13,7 @@ export function renderMethodDeclaration(state: RenderState, node: luau.MethodDec
 		result += state.line(`function ${objStr}:${node.name}(`);
 		result += state.block(() =>
 			renderParameters(state, node)
-				.map(p => state.line(p))
+				.map(param => state.line(param))
 				.join(""),
 		);
 		result += state.line(")");

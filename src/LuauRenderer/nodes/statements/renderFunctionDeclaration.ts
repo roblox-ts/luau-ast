@@ -18,7 +18,7 @@ export function renderFunctionDeclaration(state: RenderState, node: luau.Functio
 		result += state.line(fnStart);
 		result += state.block(() =>
 			renderParameters(state, node)
-				.map(p => state.line(p))
+				.map(param => state.line(param))
 				.join(""),
 		);
 		result += state.line(")");

@@ -14,7 +14,7 @@ export function renderFunctionExpression(state: RenderState, node: luau.Function
 			result += state.newline("function(");
 			result += state.block(() =>
 				renderParameters(state, node)
-					.map(p => state.line(p))
+					.map(param => state.line(param))
 					.join(""),
 			);
 			result += state.indented(") end");

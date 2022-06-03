@@ -11,7 +11,7 @@ export function renderArray(state: RenderState, node: luau.Array) {
 	const arrStr = getMembers().join("");
 	const hasFunctionExpression = luau.list.some(
 		node.members,
-		m => luau.isFunctionExpression(m) && !luau.list.isEmpty(m.statements),
+		member => luau.isFunctionExpression(member) && !luau.list.isEmpty(member.statements),
 	);
 
 	if (state.isFormattable(`{ ${arrStr} }`, undefined, hasFunctionExpression)) {
@@ -19,7 +19,7 @@ export function renderArray(state: RenderState, node: luau.Array) {
 		result += state.newline("{");
 		result += state.block(() =>
 			getMembers()
-				.map(m => state.line(m))
+				.map(value => state.line(value))
 				.join(""),
 		);
 		result += state.indented("}");
