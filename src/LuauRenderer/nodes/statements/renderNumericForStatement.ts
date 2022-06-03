@@ -8,14 +8,16 @@ export function renderNumericForStatement(state: RenderState, node: luau.Numeric
 	const endStr = render(state, node.end);
 
 	let predicateStr = `${startStr}, ${endStr}`;
-	if (node.step) {
-		predicateStr += `, ${render(state, node.step)}`;
+
+	// step of 1 can be omitted
+	if (node.step && (!luau.isNumberLiteral(node.step) || Number(node.step.value) !== 1)) {
+		const stepStr = render(state, node.step);
+		predicateStr += `, ${stepStr}`;
 	}
 
 	let result = "";
 	result += state.line(`for ${idStr} = ${predicateStr} do`);
 	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line(`end`);
-
+	result += state.line("end");
 	return result;
 }

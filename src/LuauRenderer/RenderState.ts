@@ -3,8 +3,18 @@ import { assert } from "LuauAST/util/assert";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
 
+const PRINT_WIDTH = 70;
 const INDENT_CHARACTER = "\t";
 const INDENT_CHARACTER_LENGTH = INDENT_CHARACTER.length;
+
+const NON_FORMATTABLE_RHS_EXPRESSIONS = new Set<luau.SyntaxKind>([
+	luau.SyntaxKind.CallExpression,
+	luau.SyntaxKind.MethodCallExpression,
+	luau.SyntaxKind.Array,
+	luau.SyntaxKind.Map,
+	luau.SyntaxKind.Set,
+	luau.SyntaxKind.MixedTable,
+]);
 
 /**
  * Represents the state of a rendering process.
@@ -25,7 +35,7 @@ export class RenderState {
 	 * Pops an indent from the current indent level.
 	 */
 	private popIndent() {
-		this.indent = this.indent.substr(INDENT_CHARACTER_LENGTH);
+		this.indent = this.indent.substring(INDENT_CHARACTER_LENGTH);
 	}
 
 	private tempIdFallback = 0;
@@ -103,5 +113,22 @@ export class RenderState {
 		const result = callback();
 		this.popIndent();
 		return result;
+	}
+
+	/**
+	 * Checks to see if `text` can be formatted.
+	 *
+	 * If a `expressionKind` value is passed, it will also check to see if the right-hand side expression can be formated.
+	 * @param text The text.
+	 * @param expressionKind The kind of the right-hand side expression.
+	 * @param skipCheck If set to true, the result will be always formattable.
+	 */
+	public isFormattable(text: string, expressionKind?: keyof luau.ExpressionByKind, skipCheck = false) {
+		if (skipCheck) return true;
+		const isLongStr = text.length > PRINT_WIDTH;
+		if (expressionKind !== undefined) {
+			return isLongStr && !NON_FORMATTABLE_RHS_EXPRESSIONS.has(expressionKind);
+		}
+		return isLongStr;
 	}
 }

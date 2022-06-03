@@ -1,5 +1,6 @@
 import luau from "LuauAST";
 import { render, RenderState } from "LuauRenderer";
+import { format } from "LuauRenderer/util/format";
 
 /**
  * Renders the given list of identifiers inside of `node` into a string sepearted by commas
@@ -11,5 +12,5 @@ export function renderParameters(state: RenderState, node: luau.HasParameters) {
 	if (node.hasDotDotDot) {
 		paramStrs.push("...");
 	}
-	return paramStrs.join(", ");
+	return paramStrs.map(format(state));
 }

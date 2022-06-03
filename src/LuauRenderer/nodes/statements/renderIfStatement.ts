@@ -17,12 +17,12 @@ export function renderIfStatement(state: RenderState, node: luau.IfStatement) {
 	}
 
 	if (currentElseBody && luau.list.isNonEmpty(currentElseBody)) {
-		result += state.line(`else`);
+		result += state.line("else");
 		const statements = currentElseBody;
 		result += state.block(() => renderStatements(state, statements));
 	}
 
-	result += state.line(`end`);
+	result += state.line("end");
 
 	return result;
 }
