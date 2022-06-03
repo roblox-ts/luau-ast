@@ -4,8 +4,8 @@ import { renderParameters } from "LuauRenderer/util/renderParameters";
 import { renderStatements } from "LuauRenderer/util/renderStatements";
 
 export function renderFunctionExpression(state: RenderState, node: luau.FunctionExpression) {
-	const paramStrs = renderParameters(state, node);
-	const isFormattable = state.isFormattable(`function(${paramStrs.join("")})`);
+	const paramStr = renderParameters(state, node).join("");
+	const isFormattable = state.isFormattable(`function(${paramStr})`);
 
 	let result = "";
 
@@ -21,7 +21,7 @@ export function renderFunctionExpression(state: RenderState, node: luau.Function
 			return result;
 		}
 
-		return `function(${paramStrs.join("")}) end`;
+		return `function(${paramStr}) end`;
 	}
 
 	if (isFormattable) {
@@ -33,7 +33,7 @@ export function renderFunctionExpression(state: RenderState, node: luau.Function
 		);
 		result += state.line(")");
 	} else {
-		result += `function(${paramStrs.join("")}${state.newline(")")}`;
+		result += `function(${paramStr}${state.newline(")")}`;
 	}
 
 	result += state.block(() => renderStatements(state, node.statements));

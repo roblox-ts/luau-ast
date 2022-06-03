@@ -4,9 +4,10 @@ import { renderArguments } from "LuauRenderer/util/renderArguments";
 
 export function renderCallExpression(state: RenderState, node: luau.CallExpression) {
 	const expStr = render(state, node.expression);
-	const argStrs = renderArguments(state, node.args).join("");
+	const argsStr = renderArguments(state, node.args).join("");
+	const formatStr = `${expStr}(${argsStr})`;
 
-	if (state.isFormattable(`${expStr}(${argStrs})`)) {
+	if (state.isFormattable(formatStr)) {
 		let result = "";
 		result += state.newline(`${expStr}(`);
 		result += state.block(() =>
@@ -18,5 +19,5 @@ export function renderCallExpression(state: RenderState, node: luau.CallExpressi
 
 		return result;
 	}
-	return `${expStr}(${argStrs})`;
+	return formatStr;
 }

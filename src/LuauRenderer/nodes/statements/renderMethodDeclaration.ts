@@ -5,11 +5,11 @@ import { renderStatements } from "LuauRenderer/util/renderStatements";
 
 export function renderMethodDeclaration(state: RenderState, node: luau.MethodDeclaration) {
 	const objStr = render(state, node.expression);
-	const paramStrs = renderParameters(state, node);
+	const startStr = `function ${objStr}:${node.name}(${renderParameters(state, node).join("")})`;
 
 	let result = "";
 
-	if (state.isFormattable(paramStrs.join(""))) {
+	if (state.isFormattable(startStr)) {
 		result += state.line(`function ${objStr}:${node.name}(`);
 		result += state.block(() =>
 			renderParameters(state, node)
@@ -18,7 +18,7 @@ export function renderMethodDeclaration(state: RenderState, node: luau.MethodDec
 		);
 		result += state.line(")");
 	} else {
-		result += state.line(`function ${objStr}:${node.name}(${paramStrs.join("")})`);
+		result += state.line(startStr);
 	}
 
 	result += state.block(() => renderStatements(state, node.statements));

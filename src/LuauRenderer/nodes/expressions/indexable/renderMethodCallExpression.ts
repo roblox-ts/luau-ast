@@ -6,9 +6,10 @@ import { renderArguments } from "LuauRenderer/util/renderArguments";
 export function renderMethodCallExpression(state: RenderState, node: luau.MethodCallExpression) {
 	assert(luau.isValidIdentifier(node.name));
 	const objStr = render(state, node.expression);
-	const argStr = renderArguments(state, node.args).join("");
+	const argsStr = renderArguments(state, node.args).join("");
+	const formatStr = `${objStr}:${node.name}(${argsStr})`;
 
-	if (state.isFormattable(`${objStr}:${node.name}(${argStr})`)) {
+	if (state.isFormattable(formatStr)) {
 		let result = "";
 		result += state.newline(`${objStr}:${node.name}(`);
 		result += state.block(() =>
@@ -20,5 +21,5 @@ export function renderMethodCallExpression(state: RenderState, node: luau.Method
 		return result;
 	}
 
-	return `${objStr}:${node.name}(${argStr})`;
+	return formatStr;
 }

@@ -5,13 +5,14 @@ export function renderPropertyAccessExpression(state: RenderState, node: luau.Pr
 	const expStr = render(state, node.expression);
 	const nameStr = node.name;
 	if (luau.isValidIdentifier(nameStr)) {
-		if (state.isFormattable(`${expStr}.${nameStr}`)) {
+		const formatStr = `${expStr}.${nameStr}`;
+		if (state.isFormattable(formatStr)) {
 			let result = "";
 			result += state.newline(expStr);
 			result += state.block(() => state.indented(`.${nameStr}`));
 			return result;
 		}
-		return `${expStr}.${nameStr}`;
+		return formatStr;
 	} else {
 		return `${expStr}["${nameStr}"]`;
 	}
