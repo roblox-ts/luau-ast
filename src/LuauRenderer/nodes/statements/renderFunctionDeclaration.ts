@@ -9,25 +9,11 @@ export function renderFunctionDeclaration(state: RenderState, node: luau.Functio
 		assert(luau.isAnyIdentifier(node.name), "local function cannot be a property");
 	}
 	const nameStr = render(state, node.name);
-	const startStr = `${node.localize ? "local " : ""}function ${nameStr}(`;
-	const formatStr = `${startStr}${renderParameters(state, node).join("")})`;
+	const paramStr = renderParameters(state, node, nameStr);
 
 	let result = "";
-
-	if (state.isFormattable(formatStr)) {
-		result += state.line(startStr);
-		result += state.block(() =>
-			renderParameters(state, node)
-				.map(param => state.line(param))
-				.join(""),
-		);
-		result += state.line(")");
-	} else {
-		result += state.line(formatStr);
-	}
-
+	result += state.line(`${node.localize ? "local " : ""}function ${nameStr}(${paramStr})`);
 	result += state.block(() => renderStatements(state, node.statements));
 	result += state.line("end");
-
 	return result;
 }

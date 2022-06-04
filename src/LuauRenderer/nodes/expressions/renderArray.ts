@@ -1,30 +1,34 @@
 import luau from "LuauAST";
 import { render, RenderState } from "LuauRenderer";
-import { format } from "LuauRenderer/util/format";
+
+function formatArray(state: RenderState, renderMembers: () => ReadonlyArray<string>, hasFunctionExpression: boolean) {
+	const members = renderMembers();
+	const arrayStr = `{ ${members.join(", ")} }`;
+
+	if (state.isFormattable(arrayStr, undefined, hasFunctionExpression)) {
+		let result = "{\n";
+		state.block(() => {
+			renderMembers().forEach(
+				(member, i) => (result += state.line(`${member}${i < members.length - 1 ? "," : ""}`)),
+			);
+		});
+		result += state.indented("}");
+		return result;
+	}
+
+	return arrayStr;
+}
 
 export function renderArray(state: RenderState, node: luau.Array) {
 	if (luau.list.isEmpty(node.members)) {
 		return "{}";
 	}
-
-	const getMembers = () => luau.list.mapToArray(node.members, member => render(state, member)).map(format(state));
-	const formatStr = `{ ${getMembers().join("")} }`;
-	const hasFunctionExpression = luau.list.some(
-		node.members,
-		member => luau.isFunctionExpression(member) && !luau.list.isEmpty(member.statements),
+	return formatArray(
+		state,
+		() => luau.list.mapToArray(node.members, member => render(state, member)),
+		luau.list.some(
+			node.members,
+			member => luau.isFunctionExpression(member) && !luau.list.isEmpty(member.statements),
+		),
 	);
-
-	if (state.isFormattable(formatStr, undefined, hasFunctionExpression)) {
-		let result = "";
-		result += state.newline("{");
-		result += state.block(() =>
-			getMembers()
-				.map(value => state.line(value))
-				.join(""),
-		);
-		result += state.indented("}");
-		return result;
-	}
-
-	return formatStr;
 }

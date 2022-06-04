@@ -5,20 +5,6 @@ import { renderArguments } from "LuauRenderer/util/renderArguments";
 
 export function renderMethodCallExpression(state: RenderState, node: luau.MethodCallExpression) {
 	assert(luau.isValidIdentifier(node.name));
-	const objStr = render(state, node.expression);
-	const formatStr = `${objStr}:${node.name}(${renderArguments(state, node.args).join("")})`;
-
-	if (state.isFormattable(formatStr)) {
-		let result = "";
-		result += state.newline(`${objStr}:${node.name}(`);
-		result += state.block(() =>
-			renderArguments(state, node.args)
-				.map(arg => state.line(arg))
-				.join(""),
-		);
-		result += state.indented(")");
-		return result;
-	}
-
-	return formatStr;
+	const nameStr = `${render(state, node.expression)}:${node.name}`;
+	return `${nameStr}(${renderArguments(state, node.args, nameStr)})`;
 }

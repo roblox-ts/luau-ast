@@ -11,7 +11,6 @@ export function renderAssignment(state: RenderState, node: luau.Assignment) {
 		leftStr = render(state, node.left);
 	}
 	const rightStr = render(state, node.right);
-
 	if (state.isFormattable(rightStr, node.right.kind)) {
 		let result = "";
 		result += state.line(`${leftStr} ${node.operator}`);
