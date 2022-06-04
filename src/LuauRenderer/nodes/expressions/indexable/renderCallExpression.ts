@@ -4,8 +4,7 @@ import { renderArguments } from "LuauRenderer/util/renderArguments";
 
 export function renderCallExpression(state: RenderState, node: luau.CallExpression) {
 	const expStr = render(state, node.expression);
-	const argsStr = renderArguments(state, node.args).join("");
-	const formatStr = `${expStr}(${argsStr})`;
+	const formatStr = `${expStr}(${renderArguments(state, node.args).join("")})`;
 
 	if (state.isFormattable(formatStr)) {
 		let result = "";
@@ -16,7 +15,6 @@ export function renderCallExpression(state: RenderState, node: luau.CallExpressi
 				.join(""),
 		);
 		result += state.indented(")");
-
 		return result;
 	}
 	return formatStr;

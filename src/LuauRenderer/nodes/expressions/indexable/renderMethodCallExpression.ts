@@ -6,8 +6,7 @@ import { renderArguments } from "LuauRenderer/util/renderArguments";
 export function renderMethodCallExpression(state: RenderState, node: luau.MethodCallExpression) {
 	assert(luau.isValidIdentifier(node.name));
 	const objStr = render(state, node.expression);
-	const argsStr = renderArguments(state, node.args).join("");
-	const formatStr = `${objStr}:${node.name}(${argsStr})`;
+	const formatStr = `${objStr}:${node.name}(${renderArguments(state, node.args).join("")})`;
 
 	if (state.isFormattable(formatStr)) {
 		let result = "";
