@@ -7,7 +7,7 @@ import { RenderState } from "LuauAST";
  * @param renderList The renderer callback.
  * @param name The name of the function.
  */
-export function formatFunction(state: RenderState, renderList: () => ReadonlyArray<string>, name?: string) {
+export function renderFunction(state: RenderState, renderList: () => ReadonlyArray<string>, name?: string) {
 	const list = renderList();
 	if (state.isFormattable(`${name ?? ""}(${renderList().join(", ")})`)) {
 		let result = "\n";
