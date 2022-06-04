@@ -7,31 +7,26 @@ export function renderFunctionExpression(state: RenderState, node: luau.Function
 	const paramsStr = renderParameters(state, node).join("");
 	const startStr = `function(${paramsStr})`;
 	const isFormattable = state.isFormattable(startStr);
+	const mapParameters = () =>
+		renderParameters(state, node)
+			.map(param => state.line(param))
+			.join("");
 
 	let result = "";
 
 	if (luau.list.isEmpty(node.statements)) {
 		if (isFormattable) {
 			result += state.newline("function(");
-			result += state.block(() =>
-				renderParameters(state, node)
-					.map(param => state.line(param))
-					.join(""),
-			);
+			result += state.block(mapParameters);
 			result += state.indented(") end");
 			return result;
 		}
-
 		return `${startStr} end`;
 	}
 
 	if (isFormattable) {
 		result += state.newline("function(");
-		result += state.block(() =>
-			renderParameters(state, node)
-				.map(p => state.line(p))
-				.join(""),
-		);
+		result += state.block(mapParameters);
 		result += state.line(")");
 	} else {
 		result += `function(${paramsStr}${state.newline(")")}`;
