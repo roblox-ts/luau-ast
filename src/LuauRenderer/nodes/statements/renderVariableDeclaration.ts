@@ -12,7 +12,7 @@ export function renderVariableDeclaration(state: RenderState, node: luau.Variabl
 	}
 	const rightNode = node.right;
 	if (rightNode) {
-		const formatStr = `${leftStr} = ${render(state, rightNode)}`;
+		const formatStr = `local ${leftStr} = ${render(state, rightNode)}`;
 		if (state.isFormattable(formatStr, rightNode.kind)) {
 			let result = "";
 			result += state.line(`local ${leftStr} =`);
