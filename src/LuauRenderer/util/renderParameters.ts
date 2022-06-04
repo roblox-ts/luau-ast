@@ -3,7 +3,7 @@ import { render, RenderState } from "LuauRenderer";
 import { formatFunction } from "LuauRenderer/util/formatFunction";
 
 /**
- * Renders the given list of identifiers inside of `node` into a string sepearted by commas
+ * Renders the given list of identifiers inside of `node` into a string separated by commas
  *
  * Adds `...` onto the end if node.hasDotDotDot is true
  */
