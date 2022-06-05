@@ -1,6 +1,7 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
 import { render, RenderState } from "LuauRenderer";
+import { renderRightHandSide } from "LuauRenderer/util/renderRightHandSide";
 
 export function renderVariableDeclaration(state: RenderState, node: luau.VariableDeclaration) {
 	let leftStr: string;
@@ -10,16 +11,8 @@ export function renderVariableDeclaration(state: RenderState, node: luau.Variabl
 	} else {
 		leftStr = render(state, node.left);
 	}
-	const rightNode = node.right;
-	if (rightNode) {
-		const formatStr = `local ${leftStr} = ${render(state, rightNode)}`;
-		if (state.isFormattable(formatStr, rightNode.kind)) {
-			let result = "";
-			result += state.line(`local ${leftStr} =`);
-			result += state.block(() => state.line(render(state, rightNode), node));
-			return result;
-		}
-		return state.line(formatStr, node);
+	if (node.right) {
+		return state.line(renderRightHandSide(state, `local ${leftStr} = `, node.right), node);
 	} else {
 		return state.line(`local ${leftStr}`, node);
 	}

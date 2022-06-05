@@ -14,7 +14,7 @@ export function renderArray(state: RenderState, node: luau.Array) {
 		member => luau.isFunctionExpression(member) && !luau.list.isEmpty(member.statements),
 	);
 
-	if (state.isFormattable(arrayStr, undefined, skipFormatCheck)) {
+	if (state.isFormattable(arrayStr, skipFormatCheck)) {
 		let result = "{\n";
 		state.block(() => {
 			renderMembers().forEach(
