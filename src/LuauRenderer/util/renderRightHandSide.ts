@@ -1,6 +1,6 @@
 import luau, { render, RenderState } from "LuauAST";
 
-const NON_FORMATTABLE_RHS_EXPRESSIONS = new Set<luau.SyntaxKind>([
+const NON_FORMATTABLE_RHS_EXPRESSIONS = new Set([
 	luau.SyntaxKind.CallExpression,
 	luau.SyntaxKind.MethodCallExpression,
 	luau.SyntaxKind.Array,
