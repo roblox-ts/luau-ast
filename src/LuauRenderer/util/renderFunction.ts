@@ -9,12 +9,7 @@ import { RenderState } from "LuauAST";
 export function renderFunction(state: RenderState, renderList: () => ReadonlyArray<string>, name?: string) {
 	const list = renderList();
 	if (state.isFormattable(`${name ?? ""}(${renderList().join(", ")})`)) {
-		let result = "\n";
-		state.block(() => {
-			renderList().forEach((v, i) => (result += state.line(`${v}${i < list.length - 1 ? "," : ""}`)));
-		});
-		result += state.indented("");
-		return result;
+		return `\n${state.list(renderList)}${state.indented("")}`;
 	}
 	return list.join(", ");
 }

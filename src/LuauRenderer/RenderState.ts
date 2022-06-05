@@ -107,6 +107,18 @@ export class RenderState {
 	}
 
 	/**
+	 * Returns a rendered list of lines.
+	 * @param callback The renderer callback.
+	 */
+	public list(callback: () => ReadonlyArray<string>) {
+		let result = "";
+		this.block(() => {
+			callback().forEach((v, i, list) => (result += this.line(`${v}${i < list.length - 1 ? "," : ""}`)));
+		});
+		return result;
+	}
+
+	/**
 	 * Checks to see if `text` can be formatted.
 	 * @param text The text.
 	 * @param skipCheck If set to true, the result will be always formattable.

@@ -15,14 +15,7 @@ export function renderArray(state: RenderState, node: luau.Array) {
 	);
 
 	if (state.isFormattable(arrayStr, skipFormatCheck)) {
-		let result = "{\n";
-		state.block(() => {
-			renderMembers().forEach(
-				(member, i) => (result += state.line(`${member}${i < members.length - 1 ? "," : ""}`)),
-			);
-		});
-		result += state.indented("}");
-		return result;
+		return `${state.newline("{")}${state.list(renderMembers)}${state.indented("}")}`;
 	}
 
 	return arrayStr;
