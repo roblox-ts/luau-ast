@@ -3,7 +3,7 @@ import { assert } from "LuauAST/util/assert";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
 
-const PRINT_WIDTH = 70;
+const PRINT_WIDTH = 100;
 const INDENT_CHARACTER = "\t";
 const INDENT_CHARACTER_LENGTH = INDENT_CHARACTER.length;
 
