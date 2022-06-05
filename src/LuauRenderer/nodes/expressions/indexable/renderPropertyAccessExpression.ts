@@ -7,10 +7,7 @@ export function renderPropertyAccessExpression(state: RenderState, node: luau.Pr
 	if (luau.isValidIdentifier(nameStr)) {
 		const formatStr = `${expStr}.${nameStr}`;
 		if (state.isFormattable(formatStr)) {
-			let result = "";
-			result += state.newline(expStr);
-			result += state.block(() => state.indented(`.${nameStr}`));
-			return result;
+			return `${state.newline(expStr)}${state.block(() => state.indented(`.${nameStr}`))}`;
 		}
 		return formatStr;
 	} else {
