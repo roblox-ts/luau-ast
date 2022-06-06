@@ -14,6 +14,6 @@ export function renderFunctionDeclaration(state: RenderState, node: luau.Functio
 	let result = "";
 	result += state.line(`${node.localize ? "local " : ""}function ${nameStr}(${paramStr})`);
 	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line("end");
+	result += state.line(`end`);
 	return result;
 }

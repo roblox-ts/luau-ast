@@ -12,6 +12,6 @@ export function renderFunctionExpression(state: RenderState, node: luau.Function
 	let result = "";
 	result += state.newline(`${nameStr}(${renderParameters(state, node, nameStr)})`);
 	result += state.block(() => renderStatements(state, node.statements));
-	result += state.indented("end");
+	result += state.indented(`end`);
 	return result;
 }

@@ -8,6 +8,6 @@ export function renderMethodDeclaration(state: RenderState, node: luau.MethodDec
 	let result = "";
 	result += state.line(`function ${nameStr}:${node.name}(${renderParameters(state, node, nameStr)})`);
 	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line("end");
+	result += state.line(`end`);
 	return result;
 }

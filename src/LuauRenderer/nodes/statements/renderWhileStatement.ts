@@ -6,6 +6,6 @@ export function renderWhileStatement(state: RenderState, node: luau.WhileStateme
 	let result = "";
 	result += state.line(`while ${render(state, node.condition)} do`);
 	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line("end");
+	result += state.line(`end`);
 	return result;
 }
