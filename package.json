@@ -3,7 +3,6 @@
 	"version": "1.0.1",
 	"description": "Luau AST + Renderer for roblox-ts",
 	"main": "out/LuauAST/index.js",
-	"types": "out/LuauAST/index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/roblox-ts/luau-ast.git"
