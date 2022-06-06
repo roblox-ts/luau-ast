@@ -121,9 +121,8 @@ export class RenderState {
 	/**
 	 * Checks to see if `text` can be formatted.
 	 * @param text The text.
-	 * @param skipCheck If set to true, the result will be always formattable.
 	 */
-	public isFormattable(text: string, skipCheck = false) {
-		return skipCheck || text.length > PRINT_WIDTH;
+	public isFormattable(text: string) {
+		return text.length > PRINT_WIDTH;
 	}
 }

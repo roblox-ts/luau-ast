@@ -14,7 +14,7 @@ export function renderArray(state: RenderState, node: luau.Array) {
 		member => luau.isFunctionExpression(member) && !luau.list.isEmpty(member.statements),
 	);
 
-	if (state.isFormattable(arrayStr, skipFormatCheck)) {
+	if (skipFormatCheck || state.isFormattable(arrayStr)) {
 		return `${state.newline("{")}${state.list(renderMembers)}${state.indented("}")}`;
 	}
 
