@@ -1,4 +1,5 @@
 import { RenderState } from "LuauAST";
+import { isFormattable } from "LuauRenderer/util/isFormattable";
 
 /**
  * Renders function parameters and call arguments.
@@ -7,7 +8,7 @@ import { RenderState } from "LuauAST";
  */
 export function renderFunction(state: RenderState, renderList: () => ReadonlyArray<string>, name?: string) {
 	const formatStr = renderList().join(", ");
-	if (state.isFormattable(`${name ?? ""}(${formatStr})`)) {
+	if (isFormattable(`${name ?? ""}(${formatStr})`)) {
 		return `\n${state.list(renderList)}${state.indented("")}`;
 	}
 	return formatStr;

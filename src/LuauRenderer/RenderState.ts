@@ -3,7 +3,6 @@ import { assert } from "LuauAST/util/assert";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
 
-const PRINT_WIDTH = 100;
 const INDENT_CHARACTER = "\t";
 const INDENT_CHARACTER_LENGTH = INDENT_CHARACTER.length;
 
@@ -116,13 +115,5 @@ export class RenderState {
 			callback().forEach((v, i, list) => (result += this.line(`${v}${i < list.length - 1 ? "," : ""}`)));
 		});
 		return result;
-	}
-
-	/**
-	 * Checks to see if `text` can be formatted.
-	 * @param text The text.
-	 */
-	public isFormattable(text: string) {
-		return text.length > PRINT_WIDTH;
 	}
 }

@@ -1,5 +1,6 @@
 import luau from "LuauAST";
 import { render, RenderState } from "LuauRenderer";
+import { isFormattable } from "LuauRenderer/util/isFormattable";
 
 export function renderArray(state: RenderState, node: luau.Array) {
 	if (luau.list.isEmpty(node.members)) {
@@ -14,7 +15,7 @@ export function renderArray(state: RenderState, node: luau.Array) {
 		member => luau.isFunctionExpression(member) && !luau.list.isEmpty(member.statements),
 	);
 
-	if (skipFormatCheck || state.isFormattable(arrayStr)) {
+	if (skipFormatCheck || isFormattable(arrayStr)) {
 		return `${state.newline("{")}${state.list(renderMembers)}${state.indented("}")}`;
 	}
 
