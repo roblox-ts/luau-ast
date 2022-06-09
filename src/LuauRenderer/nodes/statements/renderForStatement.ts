@@ -10,6 +10,5 @@ export function renderForStatement(state: RenderState, node: luau.ForStatement) 
 	result += state.line(`for ${idsStr} in ${expStr} do`);
 	result += state.block(() => renderStatements(state, node.statements));
 	result += state.line(`end`);
-
 	return result;
 }

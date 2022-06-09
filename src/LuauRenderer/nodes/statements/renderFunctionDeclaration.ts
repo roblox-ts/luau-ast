@@ -9,7 +9,7 @@ export function renderFunctionDeclaration(state: RenderState, node: luau.Functio
 		assert(luau.isAnyIdentifier(node.name), "local function cannot be a property");
 	}
 	const nameStr = render(state, node.name);
-	const paramStr = renderParameters(state, node);
+	const paramStr = renderParameters(state, node, nameStr);
 
 	let result = "";
 	result += state.line(`${node.localize ? "local " : ""}function ${nameStr}(${paramStr})`);

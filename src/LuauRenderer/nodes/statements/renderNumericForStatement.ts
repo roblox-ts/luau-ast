@@ -19,6 +19,5 @@ export function renderNumericForStatement(state: RenderState, node: luau.Numeric
 	result += state.line(`for ${idStr} = ${predicateStr} do`);
 	result += state.block(() => renderStatements(state, node.statements));
 	result += state.line(`end`);
-
 	return result;
 }

@@ -25,7 +25,7 @@ export class RenderState {
 	 * Pops an indent from the current indent level.
 	 */
 	private popIndent() {
-		this.indent = this.indent.substr(INDENT_CHARACTER_LENGTH);
+		this.indent = this.indent.substring(INDENT_CHARACTER_LENGTH);
 	}
 
 	private tempIdFallback = 0;
@@ -102,6 +102,18 @@ export class RenderState {
 		this.pushIndent();
 		const result = callback();
 		this.popIndent();
+		return result;
+	}
+
+	/**
+	 * Returns a rendered list of lines.
+	 * @param callback The renderer callback.
+	 */
+	public list(callback: () => ReadonlyArray<string>) {
+		let result = "";
+		this.block(() => {
+			callback().forEach((v, i, list) => (result += this.line(`${v}${i < list.length - 1 ? "," : ""}`)));
+		});
 		return result;
 	}
 }
