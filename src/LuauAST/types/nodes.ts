@@ -130,7 +130,7 @@ export interface MixedTable extends luau.Expression<luau.SyntaxKind.MixedTable> 
 export interface Assignment extends luau.Statement<luau.SyntaxKind.Assignment> {
 	left: luau.WritableExpression | luau.List<luau.WritableExpression>;
 	operator: luau.AssignmentOperator;
-	right: luau.Expression;
+	right: luau.Expression | luau.List<luau.Expression>;
 }
 
 export interface BreakStatement extends luau.Statement<luau.SyntaxKind.BreakStatement> {}
@@ -189,7 +189,7 @@ export interface MethodDeclaration extends luau.Statement<luau.SyntaxKind.Method
 
 export interface VariableDeclaration extends luau.Statement<luau.SyntaxKind.VariableDeclaration> {
 	left: luau.AnyIdentifier | luau.List<luau.AnyIdentifier>;
-	right: luau.Expression | undefined;
+	right: luau.Expression | luau.List<luau.Expression> | undefined;
 }
 
 export interface ReturnStatement extends luau.Statement<luau.SyntaxKind.ReturnStatement> {
