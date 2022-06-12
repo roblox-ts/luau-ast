@@ -28,7 +28,12 @@ function endsWithIndexableExpression(node: luau.Statement) {
 		// `local a = b` or `a = b` or `local a` or `local a, b`
 		let furthestRight: luau.Expression;
 		if (node.right) {
-			furthestRight = node.right;
+			if (luau.list.isList(node.right)) {
+				assert(luau.list.isNonEmpty(node.right));
+				furthestRight = node.right.tail.value;
+			} else {
+				furthestRight = node.right;
+			}
 		} else if (luau.list.isList(node.left)) {
 			assert(luau.list.isNonEmpty(node.left));
 			furthestRight = node.left.tail.value;
