@@ -10,8 +10,15 @@ export function renderVariableDeclaration(state: RenderState, node: luau.Variabl
 	} else {
 		leftStr = render(state, node.left);
 	}
+
 	if (node.right) {
-		const rightStr = render(state, node.right);
+		let rightStr: string;
+		if (luau.list.isList(node.right)) {
+			assert(!luau.list.isEmpty(node.right));
+			rightStr = luau.list.mapToArray(node.right, expression => render(state, expression)).join(", ");
+		} else {
+			rightStr = render(state, node.right);
+		}
 		return state.line(`local ${leftStr} = ${rightStr}`, node);
 	} else {
 		return state.line(`local ${leftStr}`, node);

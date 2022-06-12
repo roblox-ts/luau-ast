@@ -10,6 +10,14 @@ export function renderAssignment(state: RenderState, node: luau.Assignment) {
 	} else {
 		leftStr = render(state, node.left);
 	}
-	const rightStr = render(state, node.right);
+
+	let rightStr: string;
+	if (luau.list.isList(node.right)) {
+		assert(!luau.list.isEmpty(node.right));
+		rightStr = luau.list.mapToArray(node.right, expression => render(state, expression)).join(", ");
+	} else {
+		rightStr = render(state, node.right);
+	}
+
 	return state.line(`${leftStr} ${node.operator} ${rightStr}`, node);
 }

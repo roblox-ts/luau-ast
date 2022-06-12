@@ -63,7 +63,11 @@ const KIND_TO_VISITOR = identity<{ [K in luau.SyntaxKind]: VisitStrategy<K> }>({
 		} else {
 			visitNode(node.left, visitor);
 		}
-		visitNode(node.right, visitor);
+		if (luau.list.isList(node.right)) {
+			visitList(node.right, visitor);
+		} else {
+			visitNode(node.right, visitor);
+		}
 	},
 	[luau.SyntaxKind.BreakStatement]: NOOP,
 	[luau.SyntaxKind.CallStatement]: (node, visitor) => visitNode(node.expression, visitor),
@@ -116,7 +120,11 @@ const KIND_TO_VISITOR = identity<{ [K in luau.SyntaxKind]: VisitStrategy<K> }>({
 			visitNode(node.left, visitor);
 		}
 		if (node.right) {
-			visitNode(node.right, visitor);
+			if (luau.list.isList(node.right)) {
+				visitList(node.right, visitor);
+			} else {
+				visitNode(node.right, visitor);
+			}
 		}
 	},
 	[luau.SyntaxKind.ReturnStatement]: (node, visitor) => {
