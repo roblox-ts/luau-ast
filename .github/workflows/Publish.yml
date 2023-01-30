@@ -28,7 +28,8 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
           npm version ${{ inputs.version }}
           npm publish
-          git commit -am "Bump version to ${{ inputs.version }}"
+          git add -A
+          git commit -m "Bump version to ${{ inputs.version }}"
           git push --tags https://osyrisrblx:${{ secrets.github_token }}@github.com/${{ github.repo }}.git HEAD:master
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
