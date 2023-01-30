@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2.3.4
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: Install NPM Dependencies
         uses: bahmutov/npm-install@v1.7.4
@@ -30,4 +32,4 @@ jobs:
           npm publish
           git add -A
           git commit -m "Bump version to ${{ inputs.version }}"
-          git push --tags https://osyrisrblx:${{ secrets.github_token }}@github.com/${{ github.repository }}.git HEAD:master
+          git push --tags https://osyrisrblx:${{ secrets.PAT }}@github.com/${{ github.repository }}.git HEAD:master
