@@ -25,9 +25,9 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "noreply@github.com"
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.npm_token }}" > .npmrc
           npm version ${{ inputs.version }}
           npm publish
           git add -A
           git commit -m "Bump version to ${{ inputs.version }}"
-          git push --tags https://osyrisrblx:${{ secrets.PAT }}@github.com/${{ github.repository }}.git HEAD:master
+          git push --tags https://osyrisrblx:${{ secrets.github_token }}@github.com/${{ github.repository }}.git HEAD:master
