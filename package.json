@@ -1,6 +1,6 @@
 {
 	"name": "@roblox-ts/luau-ast",
-	"version": "1.0.2",
+	"version": "1.0.8",
 	"description": "Luau AST + Renderer for roblox-ts",
 	"main": "out/LuauAST/index.js",
 	"repository": {
