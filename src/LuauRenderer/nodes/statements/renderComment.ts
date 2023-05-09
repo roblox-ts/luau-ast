@@ -7,9 +7,7 @@ export function renderComment(state: RenderState, node: luau.Comment) {
 	if (lines.length > 1) {
 		const eqStr = getSafeBracketEquals(node.text);
 		let result = state.line(`--[${eqStr}[`);
-		result += state.block(() =>
-			lines.map(line => state.line(line)).join(""),
-		);
+		result += state.block(() => lines.map(line => state.line(line)).join(""));
 		result += state.line(`]${eqStr}]`);
 		return result;
 	} else {
