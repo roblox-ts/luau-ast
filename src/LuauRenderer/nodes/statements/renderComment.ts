@@ -8,15 +8,11 @@ export function renderComment(state: RenderState, node: luau.Comment) {
 		const eqStr = getSafeBracketEquals(node.text);
 		let result = state.line(`--[${eqStr}[`);
 		result += state.block(() =>
-			lines
-				.map(line => line.trim())
-				.filter(trimmed => trimmed !== "")
-				.map(line => state.line(line))
-				.join(""),
+			lines.map(line => state.line(line)).join(""),
 		);
 		result += state.line(`]${eqStr}]`);
 		return result;
 	} else {
-		return lines.map(line => state.line(`-- ${line.trim()}`)).join("");
+		return lines.map(line => state.line(`--${line}`)).join("");
 	}
 }
