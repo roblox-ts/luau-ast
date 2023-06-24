@@ -30,7 +30,7 @@ export namespace list {
 	export function make<T extends luau.Node>(...values: Array<T>): luau.List<T> {
 		assert(
 			values.every(node => luau.isNode(node)),
-			"Not all List values were a luau.Node"
+			"Not all List values were a luau.Node",
 		);
 		if (values.length > 0) {
 			const head = luau.list.makeNode(values[0]);
