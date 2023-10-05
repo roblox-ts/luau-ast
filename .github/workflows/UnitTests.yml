@@ -23,6 +23,11 @@ jobs:
           ref: lune
           path: roblox-ts
 
+      - name: Install Foreman
+        uses: Roblox/setup-foreman@v2.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup luau-ast repo
         run: |
           cd luau-ast
