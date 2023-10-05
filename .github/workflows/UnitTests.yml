@@ -34,6 +34,7 @@ jobs:
           cd roblox-ts
           npm install
           npm install ../luau-ast
+          npm run update-test-types
 
       - name: Run Tests
         run: |
