@@ -1,0 +1,48 @@
+name: UnitTests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout luau-ast repo
+        uses: actions/checkout@v4
+        with:
+          path: luau-ast
+
+      - name: Checkout roblox-ts repo
+        uses: actions/checkout@v4
+        with:
+          repository: roblox-ts/roblox-ts
+          ref: lune
+          path: roblox-ts
+
+      - name: Install Foreman
+        uses: Roblox/setup-foreman@v2.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup luau-ast repo
+        run: |
+          cd luau-ast
+          npm install
+          npm run build
+
+      - name: Setup roblox-ts repo
+        run: |
+          cd roblox-ts
+          foreman install
+          npm install
+          npm install ../luau-ast
+          npm run update-test-types
+
+      - name: Run Tests
+        run: |
+          cd roblox-ts
+          npm test
