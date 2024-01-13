@@ -20,6 +20,7 @@ export enum SyntaxKind {
 	BinaryExpression,
 	UnaryExpression,
 	IfExpression,
+	InterpolatedString,
 	Array,
 	Map,
 	Set,

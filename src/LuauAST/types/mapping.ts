@@ -22,6 +22,7 @@ export interface ExpressionByKind extends IndexableExpressionByKind {
 	[luau.SyntaxKind.BinaryExpression]: luau.BinaryExpression;
 	[luau.SyntaxKind.UnaryExpression]: luau.UnaryExpression;
 	[luau.SyntaxKind.IfExpression]: luau.IfExpression;
+	[luau.SyntaxKind.InterpolatedString]: luau.InterpolatedString;
 	[luau.SyntaxKind.Array]: luau.Array;
 	[luau.SyntaxKind.Map]: luau.Map;
 	[luau.SyntaxKind.Set]: luau.Set;

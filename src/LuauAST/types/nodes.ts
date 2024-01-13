@@ -112,6 +112,10 @@ export interface IfExpression extends luau.BaseExpression<luau.SyntaxKind.IfExpr
 	alternative: luau.Expression;
 }
 
+export interface InterpolatedString extends luau.BaseExpression<luau.SyntaxKind.InterpolatedString> {
+	segments: luau.List<luau.Expression>;
+}
+
 export interface Array extends luau.BaseExpression<luau.SyntaxKind.Array> {
 	members: luau.List<luau.Expression>;
 }
