@@ -49,6 +49,7 @@ export interface StatementByKind {
 
 export interface FieldByKind {
 	[luau.SyntaxKind.MapField]: luau.MapField;
+	[luau.SyntaxKind.InterpolatedStringPart]: luau.InterpolatedStringPart;
 }
 
 export interface NodeByKind extends luau.ExpressionByKind, luau.StatementByKind, luau.FieldByKind {}
