@@ -8,7 +8,13 @@ export function renderInterpolatedString(state: RenderState, node: luau.Interpol
 		.mapToArray(node.segments, expression => {
 			let expressionStr = render(state, expression);
 			if (luau.isStringLiteral(expression)) {
-				return expressionStr.slice(STRING_LITERAL_EDGE, -STRING_LITERAL_EDGE);
+				return (
+					expressionStr
+						.slice(STRING_LITERAL_EDGE, -STRING_LITERAL_EDGE)
+						// braces and newlines need to be escaped to match the TS behavior
+						.replace(/([{}])/g, "\\$1")
+						.replace(/\n/g, "\\\n")
+				);
 			}
 
 			// `{{}}` is invalid, so we wrap it in parenthesis
