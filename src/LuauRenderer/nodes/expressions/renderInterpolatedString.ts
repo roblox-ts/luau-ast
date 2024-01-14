@@ -19,20 +19,6 @@ export function renderInterpolatedString(state: RenderState, node: luau.Interpol
 			result += expressionStr;
 			result += "}";
 		}
-
-		// if (luau.isStringLiteral(part)) {
-		// 	// braces and newlines are escaped to be valid in luau
-		// 	result += part.value.replace(/([{}])/g, "\\$1").replace(/\n/g, "\\\n");
-		// } else {
-		// 	result += "{";
-		// 	let partStr = render(state, part);
-		// 	// `{{}}` is invalid, so we wrap it in parenthesis
-		// 	if (luau.isTable(part)) {
-		// 		partStr = `(${partStr})`;
-		// 	}
-		// 	result += partStr;
-		// 	result += "}";
-		// }
 	});
 	result += "`";
 	return result;
