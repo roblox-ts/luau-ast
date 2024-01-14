@@ -102,7 +102,12 @@ export const isSimplePrimitive = makeGuard(
 	luau.SyntaxKind.StringLiteral,
 );
 
-export const isTable = makeGuard(luau.SyntaxKind.Array, luau.SyntaxKind.Set, luau.SyntaxKind.Map);
+export const isTable = makeGuard(
+	luau.SyntaxKind.Array,
+	luau.SyntaxKind.Set,
+	luau.SyntaxKind.Map,
+	luau.SyntaxKind.MixedTable,
+);
 
 export const isFinalStatement = makeGuard(
 	luau.SyntaxKind.BreakStatement,
