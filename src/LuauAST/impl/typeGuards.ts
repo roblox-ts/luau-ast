@@ -67,6 +67,7 @@ export function isStatement(node: luau.Node): node is luau.Statement {
 
 // fields
 export const isMapField = makeGuard(luau.SyntaxKind.MapField);
+export const isInterpolatedStringPart = makeGuard(luau.SyntaxKind.InterpolatedStringPart);
 
 export function isField(node: luau.Node): node is luau.Field {
 	return node.kind >= luau.SyntaxKind.FirstField && node.kind <= luau.SyntaxKind.LastField;

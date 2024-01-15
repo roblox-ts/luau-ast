@@ -113,7 +113,7 @@ export interface IfExpression extends luau.BaseExpression<luau.SyntaxKind.IfExpr
 }
 
 export interface InterpolatedString extends luau.BaseExpression<luau.SyntaxKind.InterpolatedString> {
-	parts: luau.List<luau.InterpolatedStringPart>;
+	parts: luau.List<luau.InterpolatedStringPart | luau.Expression>;
 }
 
 export interface Array extends luau.BaseExpression<luau.SyntaxKind.Array> {
@@ -213,6 +213,5 @@ export interface MapField extends luau.BaseField<luau.SyntaxKind.MapField> {
 }
 
 export interface InterpolatedStringPart extends luau.BaseField<luau.SyntaxKind.InterpolatedStringPart> {
-	literal: string;
-	expression?: luau.Expression;
+	text: string;
 }

@@ -19,6 +19,7 @@ import { renderNumberLiteral } from "LuauRenderer/nodes/expressions/renderNumber
 import { renderSet } from "LuauRenderer/nodes/expressions/renderSet";
 import { renderStringLiteral } from "LuauRenderer/nodes/expressions/renderStringLiteral";
 import { renderUnaryExpression } from "LuauRenderer/nodes/expressions/renderUnaryExpression";
+import { renderInterpolatedStringPart } from "LuauRenderer/nodes/fields/renderInterpolatedStringPart";
 import { renderMapField } from "LuauRenderer/nodes/fields/renderMapField";
 import { renderAssignment } from "LuauRenderer/nodes/statements/renderAssignment";
 import { renderBreakStatement } from "LuauRenderer/nodes/statements/renderBreakStatement";
@@ -90,6 +91,7 @@ const KIND_TO_RENDERER = identity<{ [K in luau.SyntaxKind]: Renderer<K> }>({
 
 	// fields
 	[luau.SyntaxKind.MapField]: renderMapField,
+	[luau.SyntaxKind.InterpolatedStringPart]: renderInterpolatedStringPart,
 });
 
 /**
