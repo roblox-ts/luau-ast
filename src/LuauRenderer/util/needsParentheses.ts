@@ -35,6 +35,7 @@ const BINARY_OPERATOR_PRECEDENCE: { [K in luau.BinaryOperator]: number } = {
 	"-": 5,
 	"*": 6,
 	"/": 6,
+	"//": 6,
 	"%": 6,
 	"^": 8,
 };
