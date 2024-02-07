@@ -3,6 +3,7 @@ export type BinaryOperator =
 	| "-"
 	| "*"
 	| "/"
+	| "//"
 	| "^"
 	| "%"
 	| ".."
@@ -17,4 +18,4 @@ export type BinaryOperator =
 
 export type UnaryOperator = "-" | "not" | "#";
 
-export type AssignmentOperator = "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" | "..=";
+export type AssignmentOperator = "=" | "+=" | "-=" | "*=" | "/=" | "//=" | "%=" | "^=" | "..=";
