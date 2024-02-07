@@ -51,7 +51,7 @@ export enum SyntaxKind {
 	FirstIndexableExpression = Identifier,
 	LastIndexableExpression = ParenthesizedExpression,
 	FirstExpression = Identifier,
-	LastExpression = Set,
+	LastExpression = MixedTable,
 	FirstStatement = Assignment,
 	LastStatement = Comment,
 	FirstField = MapField,
