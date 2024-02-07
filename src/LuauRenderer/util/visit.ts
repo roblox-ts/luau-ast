@@ -51,6 +51,7 @@ const KIND_TO_VISITOR = identity<{ [K in luau.SyntaxKind]: VisitStrategy<K> }>({
 		visitNode(node.expression, visitor);
 		visitNode(node.alternative, visitor);
 	},
+	[luau.SyntaxKind.InterpolatedString]: (node, visitor) => visitList(node.parts, visitor),
 	[luau.SyntaxKind.Array]: (node, visitor) => visitList(node.members, visitor),
 	[luau.SyntaxKind.Map]: (node, visitor) => visitList(node.fields, visitor),
 	[luau.SyntaxKind.Set]: (node, visitor) => visitList(node.members, visitor),
@@ -141,6 +142,7 @@ const KIND_TO_VISITOR = identity<{ [K in luau.SyntaxKind]: VisitStrategy<K> }>({
 		visitNode(node.index, visitor);
 		visitNode(node.value, visitor);
 	},
+	[luau.SyntaxKind.InterpolatedStringPart]: NOOP,
 });
 
 function visitNode(node: luau.Node, visitor: Visitor) {

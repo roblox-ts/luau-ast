@@ -34,6 +34,7 @@ export const isFunctionExpression = makeGuard(luau.SyntaxKind.FunctionExpression
 export const isBinaryExpression = makeGuard(luau.SyntaxKind.BinaryExpression);
 export const isUnaryExpression = makeGuard(luau.SyntaxKind.UnaryExpression);
 export const isIfExpression = makeGuard(luau.SyntaxKind.IfExpression);
+export const isInterpolatedString = makeGuard(luau.SyntaxKind.InterpolatedString);
 export const isArray = makeGuard(luau.SyntaxKind.Array);
 export const isMap = makeGuard(luau.SyntaxKind.Map);
 export const isSet = makeGuard(luau.SyntaxKind.Set);
@@ -66,6 +67,7 @@ export function isStatement(node: luau.Node): node is luau.Statement {
 
 // fields
 export const isMapField = makeGuard(luau.SyntaxKind.MapField);
+export const isInterpolatedStringPart = makeGuard(luau.SyntaxKind.InterpolatedStringPart);
 
 export function isField(node: luau.Node): node is luau.Field {
 	return node.kind >= luau.SyntaxKind.FirstField && node.kind <= luau.SyntaxKind.LastField;

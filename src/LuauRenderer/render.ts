@@ -12,12 +12,14 @@ import { renderArray } from "LuauRenderer/nodes/expressions/renderArray";
 import { renderBinaryExpression } from "LuauRenderer/nodes/expressions/renderBinaryExpression";
 import { renderFunctionExpression } from "LuauRenderer/nodes/expressions/renderFunctionExpression";
 import { renderIfExpression } from "LuauRenderer/nodes/expressions/renderIfExpression";
+import { renderInterpolatedString } from "LuauRenderer/nodes/expressions/renderInterpolatedString";
 import { renderMap } from "LuauRenderer/nodes/expressions/renderMap";
 import { renderMixedTable } from "LuauRenderer/nodes/expressions/renderMixedTable";
 import { renderNumberLiteral } from "LuauRenderer/nodes/expressions/renderNumberLiteral";
 import { renderSet } from "LuauRenderer/nodes/expressions/renderSet";
 import { renderStringLiteral } from "LuauRenderer/nodes/expressions/renderStringLiteral";
 import { renderUnaryExpression } from "LuauRenderer/nodes/expressions/renderUnaryExpression";
+import { renderInterpolatedStringPart } from "LuauRenderer/nodes/fields/renderInterpolatedStringPart";
 import { renderMapField } from "LuauRenderer/nodes/fields/renderMapField";
 import { renderAssignment } from "LuauRenderer/nodes/statements/renderAssignment";
 import { renderBreakStatement } from "LuauRenderer/nodes/statements/renderBreakStatement";
@@ -64,6 +66,7 @@ const KIND_TO_RENDERER = identity<{ [K in luau.SyntaxKind]: Renderer<K> }>({
 	[luau.SyntaxKind.BinaryExpression]: renderBinaryExpression,
 	[luau.SyntaxKind.UnaryExpression]: renderUnaryExpression,
 	[luau.SyntaxKind.IfExpression]: renderIfExpression,
+	[luau.SyntaxKind.InterpolatedString]: renderInterpolatedString,
 	[luau.SyntaxKind.Array]: renderArray,
 	[luau.SyntaxKind.Map]: renderMap,
 	[luau.SyntaxKind.Set]: renderSet,
@@ -88,6 +91,7 @@ const KIND_TO_RENDERER = identity<{ [K in luau.SyntaxKind]: Renderer<K> }>({
 
 	// fields
 	[luau.SyntaxKind.MapField]: renderMapField,
+	[luau.SyntaxKind.InterpolatedStringPart]: renderInterpolatedStringPart,
 });
 
 /**

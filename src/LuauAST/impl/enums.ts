@@ -20,6 +20,7 @@ export enum SyntaxKind {
 	BinaryExpression,
 	UnaryExpression,
 	IfExpression,
+	InterpolatedString,
 	Array,
 	Map,
 	Set,
@@ -44,6 +45,7 @@ export enum SyntaxKind {
 
 	// fields
 	MapField,
+	InterpolatedStringPart,
 
 	// used to detect what category a given kind falls into
 	FirstIndexableExpression = Identifier,
@@ -53,5 +55,5 @@ export enum SyntaxKind {
 	FirstStatement = Assignment,
 	LastStatement = Comment,
 	FirstField = MapField,
-	LastField = MapField,
+	LastField = InterpolatedStringPart,
 }
