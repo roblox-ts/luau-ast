@@ -38,7 +38,7 @@ jobs:
           cd roblox-ts
           foreman install
           npm install
-          npm install ../luau-ast
+          npm install --install-links ../luau-ast
           npm run update-test-types
 
       - name: Run Tests
