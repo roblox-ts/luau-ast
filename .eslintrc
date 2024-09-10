@@ -5,19 +5,19 @@
 		"useJSXTextNode": true,
 		"ecmaVersion": 2020,
 		"sourceType": "module",
-		"project": "./tsconfig.json"
+		"project": "./tsconfig.json",
 	},
 	"plugins": [
 		"@typescript-eslint",
 		"@typescript-eslint/eslint-plugin",
 		"prettier",
 		"simple-import-sort",
-		"no-autofix"
+		"no-autofix",
 	],
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:prettier/recommended"
+		"plugin:prettier/recommended",
 	],
 	"rules": {
 		"prettier/prettier": [
@@ -29,19 +29,19 @@
 				"printWidth": 120,
 				"tabWidth": 4,
 				"useTabs": true,
-				"arrowParens": "avoid"
-			}
+				"arrowParens": "avoid",
+			},
 		],
 		"@typescript-eslint/array-type": [
 			"warn",
 			{
 				"default": "generic",
-				"readonly": "generic"
-			}
+				"readonly": "generic",
+			},
 		],
 		"@typescript-eslint/no-floating-promises": [
 			"error",
-			{ "ignoreVoid": true }
+			{ "ignoreVoid": true },
 		],
 		"@typescript-eslint/no-unused-vars": "warn",
 		"@typescript-eslint/explicit-function-return-type": "off",
@@ -54,6 +54,7 @@
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/no-require-imports": "error",
 		"@typescript-eslint/no-unused-expressions": "warn",
+		"@typescript-eslint/no-empty-object-type": "off",
 		"curly": ["warn", "multi-line", "consistent"],
 		"no-autofix/prefer-const": "warn",
 		"no-constant-condition": ["error", { "checkLoops": false }],
@@ -63,6 +64,6 @@
 		"no-undef-init": "error",
 		"prefer-const": "off",
 		"simple-import-sort/exports": "warn",
-		"simple-import-sort/imports": "warn"
-	}
+		"simple-import-sort/imports": "warn",
+	},
 }
