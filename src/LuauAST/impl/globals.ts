@@ -58,8 +58,12 @@ export const globals = {
 		unpack: luau.property(TABLE_ID, "unpack"),
 	},
 	utf8: {
-		charpattern: luau.property(UTF8_ID, "charpattern"),
-		codes: luau.property(UTF8_ID, "codes"),
+		char: luau.property(UTF8_ID, "char"),
+        charpattern: luau.property(UTF8_ID, "charpattern"),
+		codepoint: luau.property(UTF8_ID, "codepoint"),
+        codes: luau.property(UTF8_ID, "codes"),
+		len: luau.property(UTF8_ID, "len"),
+		offset: luau.property(UTF8_ID, "offset"),
 	},
 	math: {
 		min: luau.property(MATH_ID, "min"),
