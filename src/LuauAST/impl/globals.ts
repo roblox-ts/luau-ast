@@ -59,9 +59,9 @@ export const globals = {
 	},
 	utf8: {
 		char: luau.property(UTF8_ID, "char"),
-        charpattern: luau.property(UTF8_ID, "charpattern"),
+		charpattern: luau.property(UTF8_ID, "charpattern"),
 		codepoint: luau.property(UTF8_ID, "codepoint"),
-        codes: luau.property(UTF8_ID, "codes"),
+		codes: luau.property(UTF8_ID, "codes"),
 		len: luau.property(UTF8_ID, "len"),
 		offset: luau.property(UTF8_ID, "offset"),
 	},
