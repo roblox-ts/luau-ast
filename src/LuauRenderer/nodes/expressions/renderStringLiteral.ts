@@ -1,6 +1,7 @@
 import luau from "LuauAST";
 import { RenderState } from "LuauRenderer";
 import { getSafeBracketEquals } from "LuauRenderer/util/getSafeBracketEquals";
+import { stripBackslashInEscapedNewLines } from "LuauRenderer/util/stripBackslashInEscapedNewLines";
 
 function needsBracketSpacing(node: luau.StringLiteral) {
 	const parent = node.parent;
@@ -32,6 +33,7 @@ export function renderStringLiteral(state: RenderState, node: luau.StringLiteral
 	} else {
 		const eqStr = getSafeBracketEquals(node.value);
 		const spacing = needsBracketSpacing(node) ? " " : "";
-		return `${spacing}[${eqStr}[${node.value}]${eqStr}]${spacing}`;
+		const value = stripBackslashInEscapedNewLines(node.value);
+		return `${spacing}[${eqStr}[${value}]${eqStr}]${spacing}`;
 	}
 }
