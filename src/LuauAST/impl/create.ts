@@ -45,8 +45,8 @@ let lastTempId = 0;
 /**
  * Creates a new temporary identifier for a node.
  */
-export function tempId(name = "") {
-	return luau.create(luau.SyntaxKind.TemporaryIdentifier, { name, id: lastTempId++ });
+export function tempId(name = "", annotation: luau.TypeExpression | undefined = undefined) {
+	return luau.create(luau.SyntaxKind.TemporaryIdentifier, { name, id: lastTempId++, annotation });
 }
 
 /**
@@ -102,8 +102,8 @@ export function string(value: string) {
  * Creates a new identifier node.
  * @param name The name of the identifier.
  */
-export function id(name: string) {
-	return luau.create(luau.SyntaxKind.Identifier, { name });
+export function id(name: string, annotation: luau.TypeExpression | undefined = undefined) {
+	return luau.create(luau.SyntaxKind.Identifier, { name, annotation });
 }
 
 /**
@@ -180,5 +180,26 @@ export function call(expression: luau.IndexableExpression, args: Array<luau.Expr
 	return luau.create(luau.SyntaxKind.CallExpression, {
 		expression,
 		args: luau.list.make(...args),
+	});
+}
+
+export function typeId(name: string) {
+	return luau.create(luau.SyntaxKind.TypeIdentifier, {
+		module: undefined,
+		name,
+	});
+}
+
+export function any() {
+	return luau.create(luau.SyntaxKind.TypeIdentifier, {
+		module: undefined,
+		name: "any",
+	});
+}
+
+export function cast(expression: luau.Expression, type: luau.TypeExpression) {
+	return luau.create(luau.SyntaxKind.TypeCast, {
+		expression,
+		type,
 	});
 }
