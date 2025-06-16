@@ -36,7 +36,7 @@ jobs:
       - name: Setup roblox-ts repo
         run: |
           cd roblox-ts
-          rokit install
+          rokit install --no-trust-check
           npm install
           npm install --install-links ../luau-ast
           npm run update-test-types
