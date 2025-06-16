@@ -16,6 +16,8 @@ export interface BaseExpression<T extends keyof luau.ExpressionByKind = keyof lu
 export interface BaseStatement<T extends keyof luau.StatementByKind = keyof luau.StatementByKind>
 	extends luau.BaseNode<T> {}
 
+export interface BaseType<T extends keyof luau.TypeByKind = keyof luau.TypeByKind> extends luau.BaseNode<T> {}
+
 export interface BaseField<T extends keyof luau.FieldByKind = keyof luau.FieldByKind> extends luau.BaseNode<T> {}
 
 export interface HasParameters {
@@ -24,6 +26,13 @@ export interface HasParameters {
 }
 
 export type AnyIdentifier = luau.Identifier | luau.TemporaryIdentifier;
+
+export type TypeExpression =
+	| luau.TypeIdentifier
+	| luau.TypeMixedTable
+	| luau.TypeFunction
+	| luau.TypeTypeOf
+	| luau.None;
 
 export type WritableExpression = luau.AnyIdentifier | luau.PropertyAccessExpression | luau.ComputedIndexExpression;
 
@@ -63,11 +72,13 @@ export interface FunctionExpression extends luau.BaseExpression<luau.SyntaxKind.
 
 export interface Identifier extends luau.BaseExpression<luau.SyntaxKind.Identifier> {
 	name: string;
+	annotation?: TypeExpression;
 }
 
 export interface TemporaryIdentifier extends luau.BaseExpression<luau.SyntaxKind.TemporaryIdentifier> {
 	name: string;
 	id: number;
+	annotation?: TypeExpression;
 }
 
 export interface ComputedIndexExpression extends luau.BaseExpression<luau.SyntaxKind.ComputedIndexExpression> {
@@ -185,6 +196,7 @@ export interface FunctionDeclaration extends luau.BaseStatement<luau.SyntaxKind.
 	localize: boolean;
 	name: luau.AnyIdentifier | luau.PropertyAccessExpression;
 	statements: luau.List<luau.Statement>;
+	returnType?: TypeExpression;
 }
 
 export interface MethodDeclaration extends luau.BaseStatement<luau.SyntaxKind.MethodDeclaration>, HasParameters {
@@ -214,4 +226,49 @@ export interface MapField extends luau.BaseField<luau.SyntaxKind.MapField> {
 
 export interface InterpolatedStringPart extends luau.BaseField<luau.SyntaxKind.InterpolatedStringPart> {
 	text: string;
+}
+
+// types
+export interface TypeIdentifier extends luau.BaseType<luau.SyntaxKind.TypeIdentifier> {
+	module?: string;
+	name: string;
+}
+
+export interface TypeMixedTable extends luau.BaseType<luau.SyntaxKind.TypeMixedTable> {
+	fields: luau.List<luau.TypeMixedTableField | luau.TypeMixedTableIndexedField>;
+}
+
+export interface TypeMixedTableField extends luau.BaseType<luau.SyntaxKind.TypeMixedTableField> {
+	index: luau.TypeIdentifier;
+	value: luau.TypeExpression;
+}
+
+export interface TypeMixedTableIndexedField extends luau.BaseType<luau.SyntaxKind.TypeMixedTableIndexedField> {
+	index: luau.TypeIdentifier;
+	value: luau.TypeExpression;
+}
+
+export interface TypeFunction extends luau.BaseType<luau.SyntaxKind.TypeFunction> {
+	parameters?: luau.List<TypeParameter>;
+	dotDotDot?: TypeExpression;
+	returnType?: TypeExpression;
+}
+
+export interface TypeParameter extends luau.BaseType<luau.SyntaxKind.TypeParameter> {
+	name?: string;
+	value: luau.TypeExpression;
+}
+
+export interface TypeTypeOf extends luau.BaseType<luau.SyntaxKind.TypeTypeOf> {
+	expression: luau.Expression;
+}
+
+export interface TypeStatement extends luau.BaseStatement<luau.SyntaxKind.TypeStatement> {
+	identifier: luau.TypeIdentifier;
+	expression: TypeExpression;
+}
+
+export interface TypeCast extends luau.BaseExpression<luau.SyntaxKind.TypeCast> {
+	expression: luau.Expression;
+	type: TypeExpression;
 }

@@ -3,11 +3,14 @@ import { assert } from "LuauAST/util/assert";
 import { getKindName } from "LuauAST/util/getKindName";
 import { renderCallExpression } from "LuauRenderer/nodes/expressions/indexable/renderCallExpression";
 import { renderComputedIndexExpression } from "LuauRenderer/nodes/expressions/indexable/renderComputedIndexExpression";
-import { renderIdentifier } from "LuauRenderer/nodes/expressions/indexable/renderIdentifier";
+import { renderIdentifier, renderIdentifierWithType } from "LuauRenderer/nodes/expressions/indexable/renderIdentifier";
 import { renderMethodCallExpression } from "LuauRenderer/nodes/expressions/indexable/renderMethodCallExpression";
 import { renderParenthesizedExpression } from "LuauRenderer/nodes/expressions/indexable/renderParenthesizedExpression";
 import { renderPropertyAccessExpression } from "LuauRenderer/nodes/expressions/indexable/renderPropertyAccessExpression";
-import { renderTemporaryIdentifier } from "LuauRenderer/nodes/expressions/indexable/renderTemporaryIdentifier";
+import {
+	renderTemporaryIdentifier,
+	renderTemporaryIdentifierWithType,
+} from "LuauRenderer/nodes/expressions/indexable/renderTemporaryIdentifier";
 import { renderArray } from "LuauRenderer/nodes/expressions/renderArray";
 import { renderBinaryExpression } from "LuauRenderer/nodes/expressions/renderBinaryExpression";
 import { renderFunctionExpression } from "LuauRenderer/nodes/expressions/renderFunctionExpression";
@@ -41,6 +44,18 @@ import { solveTempIds } from "LuauRenderer/solveTempIds";
 import { identity } from "LuauRenderer/util/identity";
 import { renderStatements } from "LuauRenderer/util/renderStatements";
 import { visit } from "LuauRenderer/util/visit";
+
+import { renderTypeDeclaration } from "./nodes/statements/renderTypeDeclaration";
+import {
+	renderMixedTableFieldType,
+	renderMixedTableIndexedFieldType,
+	renderMixedTableType,
+} from "./nodes/types/renderMixedTable";
+import { renderTypeCast } from "./nodes/types/renderTypeCast";
+import { renderTypeFunction } from "./nodes/types/renderTypeFunction";
+import { renderTypeIdentifier } from "./nodes/types/renderTypeIdentifier";
+import { renderTypeOf } from "./nodes/types/renderTypeOf";
+import { renderTypeParameter } from "./nodes/types/renderTypeParameter";
 
 type Renderer<T extends luau.SyntaxKind> = (state: RenderState, node: luau.NodeByKind[T]) => string;
 
@@ -88,10 +103,21 @@ const KIND_TO_RENDERER = identity<{ [K in luau.SyntaxKind]: Renderer<K> }>({
 	[luau.SyntaxKind.VariableDeclaration]: renderVariableDeclaration,
 	[luau.SyntaxKind.ReturnStatement]: renderReturnStatement,
 	[luau.SyntaxKind.Comment]: renderComment,
+	[luau.SyntaxKind.TypeStatement]: renderTypeDeclaration,
 
 	// fields
 	[luau.SyntaxKind.MapField]: renderMapField,
 	[luau.SyntaxKind.InterpolatedStringPart]: renderInterpolatedStringPart,
+
+	// types
+	[luau.SyntaxKind.TypeIdentifier]: renderTypeIdentifier,
+	[luau.SyntaxKind.TypeMixedTable]: renderMixedTableType,
+	[luau.SyntaxKind.TypeFunction]: renderTypeFunction,
+	[luau.SyntaxKind.TypeParameter]: renderTypeParameter,
+	[luau.SyntaxKind.TypeMixedTableField]: renderMixedTableFieldType,
+	[luau.SyntaxKind.TypeMixedTableIndexedField]: renderMixedTableIndexedFieldType,
+	[luau.SyntaxKind.TypeTypeOf]: renderTypeOf,
+	[luau.SyntaxKind.TypeCast]: renderTypeCast,
 });
 
 /**
@@ -103,6 +129,20 @@ const KIND_TO_RENDERER = identity<{ [K in luau.SyntaxKind]: Renderer<K> }>({
 export function render<T extends luau.SyntaxKind>(state: RenderState, node: luau.Node<T>): string {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	return KIND_TO_RENDERER[node.kind](state, node as any);
+}
+
+export function renderTyped(
+	state: RenderState,
+	node: luau.Node<luau.SyntaxKind.Identifier | luau.SyntaxKind.TemporaryIdentifier>,
+): string {
+	switch (node.kind) {
+		case luau.SyntaxKind.Identifier: {
+			return renderIdentifierWithType(state, node);
+		}
+		case luau.SyntaxKind.TemporaryIdentifier: {
+			return renderTemporaryIdentifierWithType(state, node);
+		}
+	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
