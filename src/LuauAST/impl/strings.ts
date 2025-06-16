@@ -5,7 +5,9 @@ export const strings = {
 	__index: luau.string("__index"),
 	__tostring: luau.string("__tostring"),
 	__mode: luau.string("__mode"),
-	k: luau.string("k"), // used for __mode
+	// used for __mode
+	k: luau.string("k"),
+	v: luau.string("v"),
 
 	// types
 	number: luau.string("number"),
