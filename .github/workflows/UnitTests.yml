@@ -22,8 +22,8 @@ jobs:
           repository: roblox-ts/roblox-ts
           path: roblox-ts
 
-      - name: Install Foreman
-        uses: Roblox/setup-foreman@v2.1
+      - name: Install Rokit
+        uses: roblox-ts/setup-rokit@v0.1.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,7 +36,7 @@ jobs:
       - name: Setup roblox-ts repo
         run: |
           cd roblox-ts
-          foreman install
+          rokit install
           npm install
           npm install --install-links ../luau-ast
           npm run update-test-types
