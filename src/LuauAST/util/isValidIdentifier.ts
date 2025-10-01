@@ -1,5 +1,5 @@
 // X = reserved by TypeScript
-const LUAU_RESERVED_KEYWORDS = new Set([
+export const LUAU_RESERVED_KEYWORDS = new Set([
 	"and",
 	"break", // X
 	"do", // X
@@ -23,7 +23,7 @@ const LUAU_RESERVED_KEYWORDS = new Set([
 	"while", // X
 ]);
 
-const LUAU_IDENTIFIER_REGEX = /^[A-Za-z_][A-Za-z0-9_]*$/;
+export const LUAU_IDENTIFIER_REGEX = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
 /** Returns true if the given string is a valid Luau identifier, and does not conflict with a temporary identifier */
 export function isValidIdentifier(id: string) {
