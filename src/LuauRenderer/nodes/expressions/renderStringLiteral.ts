@@ -2,20 +2,24 @@ import luau from "LuauAST";
 import { RenderState } from "LuauRenderer";
 import { getSafeBracketEquals } from "LuauRenderer/util/getSafeBracketEquals";
 
+// separates long-bracket string delimiters from surrounding indexing brackets to avoid ambiguous syntax
 function needsBracketSpacing(node: luau.StringLiteral) {
 	const parent = node.parent;
 	if (!parent) {
 		return false;
 	}
 
+	// [ [[a]] ] = b
 	if (luau.isMapField(parent) && node === parent.index) {
 		return true;
 	}
 
+	// a[ [[b]] ]
 	if (luau.isComputedIndexExpression(parent) && node === parent.index) {
 		return true;
 	}
 
+	// { [ [[a]] ] = true }
 	if (luau.isSet(parent)) {
 		return true;
 	}
