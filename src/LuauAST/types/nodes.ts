@@ -53,6 +53,7 @@ export interface NumberLiteral extends luau.BaseExpression<luau.SyntaxKind.Numbe
 
 export interface StringLiteral extends luau.BaseExpression<luau.SyntaxKind.StringLiteral> {
 	value: string;
+	quote?: '"' | "'";
 }
 
 export interface VarArgsLiteral extends luau.BaseExpression<luau.SyntaxKind.VarArgsLiteral> {}

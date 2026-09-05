@@ -28,6 +28,10 @@ function needsBracketSpacing(node: luau.StringLiteral) {
 }
 
 export function renderStringLiteral(state: RenderState, node: luau.StringLiteral) {
+	if (node.quote !== undefined) {
+		return `${node.quote}${node.value}${node.quote}`;
+	}
+
 	const isMultiline = node.value.includes("\n");
 	if (!isMultiline && !node.value.includes('"')) {
 		return `"${node.value}"`;

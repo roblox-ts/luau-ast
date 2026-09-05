@@ -2,11 +2,9 @@ import luau from "LuauAST";
 import { RenderState } from "LuauRenderer";
 
 export function renderInterpolatedStringPart(state: RenderState, node: luau.InterpolatedStringPart) {
-	return (
-		node.text
-			// escape braces, but do not touch braces within unicode escape codes
-			.replace(/(\\u{[a-fA-F0-9]+})|([{}])/g, (_, unicodeEscape, brace) => unicodeEscape ?? "\\" + brace)
-			// escape newlines, captures a CR with optionally an LF after it or just an LF on its own
-			.replace(/(\r\n?|\n)/g, "\\$1")
+	// consume complete escapes so an escaped backslash cannot start a unicode escape
+	return node.text.replace(
+		/(\\(?:u\{[a-fA-F0-9]+\}|\r\n|[\s\S]))|([{}]|\r\n?|\n)/g,
+		(_, escape, character) => escape ?? "\\" + character,
 	);
 }

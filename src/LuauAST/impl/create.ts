@@ -8,9 +8,7 @@ type FilteredNodeByKind<T extends keyof luau.NodeByKind> = FilterProps<luau.Node
 // creation
 export function create<T extends keyof luau.NodeByKind>(
 	kind: T,
-	fields: {
-		[K in Exclude<keyof FilteredNodeByKind<T>, keyof luau.Node>]: FilteredNodeByKind<T>[K];
-	},
+	fields: Omit<FilteredNodeByKind<T>, keyof luau.Node>,
 ): luau.NodeByKind[T] {
 	// super hack!
 	const node = Object.assign({ kind }, fields) as unknown as luau.NodeByKind[T];
@@ -93,9 +91,10 @@ export function number(value: number): luau.Expression {
 /**
  * Creates a new `string` literal node.
  * @param value The value of the string
+ * @param quote Explicit delimiter; value must already be escaped for this delimiter.
  */
-export function string(value: string) {
-	return luau.create(luau.SyntaxKind.StringLiteral, { value });
+export function string(value: string, quote?: luau.StringLiteral["quote"]) {
+	return luau.create(luau.SyntaxKind.StringLiteral, { value, quote });
 }
 
 /**
