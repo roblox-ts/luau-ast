@@ -1,20 +1,20 @@
-const { fixupPluginRules } = require("@eslint/compat");
-const eslint = require("@eslint/js");
-const tseslint = require("@typescript-eslint/eslint-plugin");
-const parser = require("@typescript-eslint/parser");
-const noAutofix = require("eslint-plugin-no-autofix");
-const prettier = require("eslint-plugin-prettier/recommended");
-const simpleImportSort = require("eslint-plugin-simple-import-sort");
+import { fixupPluginRules } from "@eslint/compat";
+import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import noAutofix from "eslint-plugin-no-autofix";
+import prettier from "eslint-plugin-prettier/recommended";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import tseslint from "typescript-eslint";
 
-module.exports = [
+export default defineConfig(
 	{ ignores: ["out/**", "tests/**"] },
 	eslint.configs.recommended,
-	...tseslint.configs["flat/recommended"],
+	...tseslint.configs.recommended,
 	prettier,
 	{
 		files: ["src/**/*.ts"],
 		languageOptions: {
-			parser,
+			parser: tseslint.parser,
 			parserOptions: { project: "./tsconfig.json", ecmaFeatures: { jsx: true } },
 		},
 		plugins: { "no-autofix": fixupPluginRules(noAutofix), "simple-import-sort": simpleImportSort },
@@ -55,4 +55,4 @@ module.exports = [
 			"simple-import-sort/imports": "warn",
 		},
 	},
-];
+);
