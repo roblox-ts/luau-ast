@@ -19,6 +19,17 @@ export default defineConfig(
 		},
 		plugins: { "no-autofix": fixupPluginRules(noAutofix), "simple-import-sort": simpleImportSort },
 		rules: {
+			// keep the existing lint policy when recommended presets change
+			"no-constant-binary-expression": "off",
+			"no-empty-static-block": "off",
+			"no-inner-declarations": ["error", "functions", { blockScopedFunctions: "disallow" }],
+			"no-shadow-restricted-names": ["error", { reportGlobalThis: false }],
+			"no-unassigned-vars": "off",
+			"no-unused-private-class-members": "off",
+			"no-useless-assignment": "off",
+			"no-with": "error",
+			"preserve-caught-error": "off",
+
 			"prettier/prettier": [
 				"warn",
 				{
