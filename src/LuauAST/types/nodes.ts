@@ -1,9 +1,20 @@
 import luau from "LuauAST";
 
 // base types
+export interface SourcePosition {
+	line: number;
+	column: number;
+}
+
+export interface SourceRange {
+	start: SourcePosition;
+	end?: SourcePosition;
+}
+
 export interface BaseNode<T extends luau.SyntaxKind = luau.SyntaxKind> {
 	kind: T;
 	parent?: luau.Node;
+	origin?: SourceRange;
 }
 
 export interface BaseIndexableExpression<
