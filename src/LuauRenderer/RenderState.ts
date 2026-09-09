@@ -2,6 +2,7 @@ import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
+import { concat, RenderFragment } from "LuauRenderer/Fragment";
 
 const INDENT_CHARACTER = "\t";
 const INDENT_CHARACTER_LENGTH = INDENT_CHARACTER.length;
@@ -99,6 +100,25 @@ export class RenderState {
 	 * @param callback The function used to render the block.
 	 */
 	public block<T>(callback: () => T) {
+		this.pushIndent();
+		const result = callback();
+		this.popIndent();
+		return result;
+	}
+
+	public fragmentNewline(text: RenderFragment): RenderFragment {
+		return concat(text, "\n");
+	}
+
+	public fragmentIndented(text: RenderFragment): RenderFragment {
+		return concat(this.indent, text);
+	}
+
+	public fragmentLine(text: RenderFragment, endNode?: luau.Statement): RenderFragment {
+		return concat(this.fragmentIndented(text), endNode ? getEnding(this, endNode) : "", "\n");
+	}
+
+	public fragmentBlock(callback: () => RenderFragment): RenderFragment {
 		this.pushIndent();
 		const result = callback();
 		this.popIndent();

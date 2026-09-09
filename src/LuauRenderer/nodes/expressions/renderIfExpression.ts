@@ -1,22 +1,40 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { concat, markNode, RenderFragment } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 import { needsParentheses } from "LuauRenderer/util/needsParentheses";
 
 export function renderIfExpression(state: RenderState, node: luau.IfExpression) {
-	let result = `if ${render(state, node.condition)} then ${render(state, node.expression)} `;
+	let result: RenderFragment = concat(
+		"if ",
+		renderNode(state, node.condition),
+		" then ",
+		renderNode(state, node.expression),
+		" ",
+	);
 
 	let currentAlternative = node.alternative;
 	while (luau.isIfExpression(currentAlternative)) {
-		const condition = render(state, currentAlternative.condition);
-		const expression = render(state, currentAlternative.expression);
-		result += `elseif ${condition} then ${expression} `;
+		result = concat(
+			result,
+			markNode(
+				currentAlternative,
+				concat(
+					"elseif ",
+					renderNode(state, currentAlternative.condition),
+					" then ",
+					renderNode(state, currentAlternative.expression),
+					" ",
+				),
+			),
+		);
 		currentAlternative = currentAlternative.alternative;
 	}
 
-	result += `else ${render(state, currentAlternative)}`;
+	result = concat(result, "else ", renderNode(state, currentAlternative));
 
 	if (needsParentheses(node)) {
-		result = `(${result})`;
+		result = concat("(", result, ")");
 	}
 
 	return result;

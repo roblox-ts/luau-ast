@@ -1,15 +1,19 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 
 export function renderSet(state: RenderState, node: luau.Set) {
 	if (luau.list.isEmpty(node.members)) {
 		return "{}";
 	}
 
-	let result = "{\n";
+	const members = new Array<RenderFragment>();
 	state.block(() => {
-		luau.list.forEach(node.members, member => (result += state.line(`[${render(state, member)}] = true,`)));
+		luau.list.forEach(node.members, member =>
+			members.push(state.fragmentLine(concat("[", renderNode(state, member), "] = true,"))),
+		);
+		return "";
 	});
-	result += state.indented("}");
-	return result;
+	return concat("{\n", ...members, state.fragmentIndented("}"));
 }
