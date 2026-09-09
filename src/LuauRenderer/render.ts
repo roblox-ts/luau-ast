@@ -114,7 +114,6 @@ function debugAST(ast: luau.List<luau.Statement>) {
 
 	visit(ast, {
 		before: node => {
-			// eslint-disable-next-line no-console
 			console.log(`${indent}${getKindName(node.kind)}`);
 			pushIndent();
 		},
