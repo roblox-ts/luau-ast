@@ -1,6 +1,6 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
-import { concat, flattenFragment, RenderFragment } from "LuauRenderer/Fragment";
+import { flattenFragment, RenderFragment, sequence } from "LuauRenderer/Fragment";
 import { renderNode } from "LuauRenderer/render";
 import { RenderState } from "LuauRenderer/RenderState";
 
@@ -17,7 +17,7 @@ export function renderStatements(state: RenderState, statements: luau.List<luau.
 
 /** @internal */
 export function renderStatementsFragment(state: RenderState, statements: luau.List<luau.Statement>): RenderFragment {
-	const result = new Array<RenderFragment>();
+	let result: string | Array<RenderFragment> = state.includePositions ? new Array<RenderFragment>() : "";
 	let listNode = statements.head;
 	let hasFinalStatement = false;
 	while (listNode !== undefined) {
@@ -28,10 +28,15 @@ export function renderStatementsFragment(state: RenderState, statements: luau.Li
 		hasFinalStatement ||= luau.isFinalStatement(listNode.value);
 
 		state.pushListNode(listNode);
-		result.push(renderNode(state, listNode.value));
+		const statement = renderNode(state, listNode.value);
+		if (typeof result === "string") {
+			result += statement as string;
+		} else {
+			result.push(statement);
+		}
 		state.popListNode();
 
 		listNode = listNode.next;
 	}
-	return concat(...result);
+	return typeof result === "string" ? result : sequence(result);
 }

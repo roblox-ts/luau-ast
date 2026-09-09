@@ -108,7 +108,8 @@ export function render<T extends luau.SyntaxKind>(state: RenderState, node: luau
 /** @internal */
 export function renderNode<T extends luau.SyntaxKind>(state: RenderState, node: luau.Node<T>): RenderFragment {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return markNode(node, KIND_TO_RENDERER[node.kind](state, node as any));
+	const content = KIND_TO_RENDERER[node.kind](state, node as any);
+	return state.includePositions ? markNode(node, content) : content;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -153,7 +154,7 @@ export interface RenderResultWithPositions {
  * Positions are zero-based UTF-16 line and column offsets.
  */
 export function renderASTWithPositions(ast: luau.List<luau.Statement>): RenderResultWithPositions {
-	const state = new RenderState();
+	const state = new RenderState(true);
 	solveTempIds(state, ast);
 	return flattenFragment(renderStatementsFragment(state, ast), true);
 }

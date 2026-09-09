@@ -6,15 +6,15 @@ export interface SourcePosition {
 	column: number;
 }
 
-export interface SourceRange {
+export interface NodeOrigin {
 	start: SourcePosition;
-	end?: SourcePosition;
+	closing?: SourcePosition;
 }
 
 export interface BaseNode<T extends luau.SyntaxKind = luau.SyntaxKind> {
 	kind: T;
 	parent?: luau.Node;
-	origin?: SourceRange;
+	origin?: NodeOrigin;
 }
 
 export interface BaseIndexableExpression<

@@ -1,5 +1,5 @@
 import luau from "LuauAST";
-import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { concat, RenderFragment, sequence } from "LuauRenderer/Fragment";
 import { renderNode } from "LuauRenderer/render";
 import { RenderState } from "LuauRenderer/RenderState";
 
@@ -13,5 +13,5 @@ export function renderMap(state: RenderState, node: luau.Map) {
 		luau.list.forEach(node.fields, field => fields.push(state.fragmentLine(concat(renderNode(state, field), ","))));
 		return "";
 	});
-	return concat("{\n", ...fields, state.fragmentIndented("}"));
+	return sequence(["{\n", ...fields, state.fragmentIndented("}")]);
 }

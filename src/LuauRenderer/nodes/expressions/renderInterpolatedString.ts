@@ -1,5 +1,5 @@
 import luau from "LuauAST";
-import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { concat, RenderFragment, sequence } from "LuauRenderer/Fragment";
 import { renderNode } from "LuauRenderer/render";
 import { RenderState } from "LuauRenderer/RenderState";
 
@@ -19,5 +19,5 @@ export function renderInterpolatedString(state: RenderState, node: luau.Interpol
 		}
 	});
 	result.push("`");
-	return concat(...result);
+	return sequence(result);
 }

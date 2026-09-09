@@ -1,5 +1,5 @@
 import luau from "LuauAST";
-import { concat, markClosing, RenderFragment } from "LuauRenderer/Fragment";
+import { concat, RenderFragment } from "LuauRenderer/Fragment";
 import { renderNode } from "LuauRenderer/render";
 import { RenderState } from "LuauRenderer/RenderState";
 import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
@@ -14,8 +14,8 @@ export function renderNumericForStatement(state: RenderState, node: luau.Numeric
 
 	return concat(
 		state.fragmentLine(concat("for ", renderNode(state, node.id), " = ", predicate, " do")),
-		state.fragmentBlock(() => renderStatementsFragment(state, node.statements)),
-		markClosing(node),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.fragmentClosing(node),
 		state.fragmentLine("end"),
 	);
 }

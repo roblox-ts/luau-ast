@@ -1,5 +1,5 @@
 import luau from "LuauAST";
-import { concat, markClosing } from "LuauRenderer/Fragment";
+import { concat } from "LuauRenderer/Fragment";
 import { renderNode } from "LuauRenderer/render";
 import { RenderState } from "LuauRenderer/RenderState";
 import { renderParametersFragment } from "LuauRenderer/util/renderParameters";
@@ -16,8 +16,8 @@ export function renderMethodDeclaration(state: RenderState, node: luau.MethodDec
 				")",
 			),
 		),
-		state.fragmentBlock(() => renderStatementsFragment(state, node.statements)),
-		markClosing(node),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.fragmentClosing(node),
 		state.fragmentLine("end"),
 	);
 }

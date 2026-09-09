@@ -6,7 +6,7 @@ type FilterProps<T, U> = { [K in keyof T]: T[K] extends U ? T[K] : never };
 type FilteredNodeByKind<T extends keyof luau.NodeByKind> = FilterProps<luau.NodeByKind[T], AllowedFieldTypes>;
 
 /** Attaches a source-language range to a node and returns the node. */
-export function setNodeOrigin<T extends luau.Node>(node: T, origin: luau.SourceRange): T {
+export function setNodeOrigin<T extends luau.Node>(node: T, origin: luau.NodeOrigin): T {
 	node.origin = origin;
 	return node;
 }

@@ -35,10 +35,27 @@ interface ClosingFragment {
 export type RenderFragment = string | SequenceFragment | NodeFragment | ClosingFragment;
 
 export function concat(...parts: ReadonlyArray<RenderFragment>): RenderFragment {
+	let result = "";
+	for (const part of parts) {
+		if (typeof part !== "string") {
+			return { kind: "sequence", parts };
+		}
+		result += part;
+	}
+	return result;
+}
+
+export function sequence(parts: ReadonlyArray<RenderFragment>): RenderFragment {
+	if (parts.every(part => typeof part === "string")) {
+		return (parts as ReadonlyArray<string>).join("");
+	}
 	return { kind: "sequence", parts };
 }
 
 export function join(parts: ReadonlyArray<RenderFragment>, separator: string): RenderFragment {
+	if (parts.every(part => typeof part === "string")) {
+		return (parts as ReadonlyArray<string>).join(separator);
+	}
 	const result = new Array<RenderFragment>();
 	for (let index = 0; index < parts.length; index++) {
 		if (index > 0) {
@@ -46,7 +63,7 @@ export function join(parts: ReadonlyArray<RenderFragment>, separator: string): R
 		}
 		result.push(parts[index]);
 	}
-	return concat(...result);
+	return sequence(result);
 }
 
 export function markNode(node: luau.Node, content: RenderFragment): RenderFragment {
@@ -82,24 +99,30 @@ function advance(position: GeneratedPosition & { previousWasCarriageReturn: bool
 }
 
 export function flattenFragment(fragment: RenderFragment, includePositions = false) {
+	if (typeof fragment === "string") {
+		return { code: fragment, positions: new Array<RenderedNodePosition>() };
+	}
 	let code = "";
 	const position = { line: 0, column: 0, previousWasCarriageReturn: false };
 	const positions = new Array<RenderedNodePosition>();
 	const activeNodes = new Array<{ node: luau.Node; closing?: GeneratedPosition }>();
+	type StackEntry = RenderFragment | { kind: "end-node"; active: (typeof activeNodes)[number]; resultIndex: number };
+	const stack = new Array<StackEntry>(fragment);
 
-	const write = (current: RenderFragment): void => {
+	while (stack.length > 0) {
+		const current = stack.pop()!;
 		if (typeof current === "string") {
 			code += current;
 			if (includePositions) {
 				advance(position, current);
 			}
-			return;
+			continue;
 		}
 		if (current.kind === "sequence") {
-			for (const part of current.parts) {
-				write(part);
+			for (let index = current.parts.length - 1; index >= 0; index--) {
+				stack.push(current.parts[index]);
 			}
-			return;
+			continue;
 		}
 		if (current.kind === "closing") {
 			if (includePositions) {
@@ -111,26 +134,32 @@ export function flattenFragment(fragment: RenderFragment, includePositions = fal
 					}
 				}
 			}
-			return;
+			continue;
+		}
+		if (current.kind === "end-node") {
+			const result = positions[current.resultIndex];
+			result.range.end = copyPosition(position);
+			if (current.active.closing) {
+				result.range.closing = current.active.closing;
+			}
+			activeNodes.pop();
+			continue;
+		}
+		if (!includePositions) {
+			stack.push(current.content);
+			continue;
 		}
 
-		const start = copyPosition(position);
 		const active: { node: luau.Node; closing?: GeneratedPosition } = { node: current.node };
 		activeNodes.push(active);
-		write(current.content);
-		if (includePositions) {
-			positions.push({
-				node: current.node,
-				range: {
-					start,
-					end: copyPosition(position),
-					...(active.closing ? { closing: active.closing } : {}),
-				},
-			});
-		}
-		activeNodes.pop();
-	};
-
-	write(fragment);
+		const resultIndex = positions.push({
+			node: current.node,
+			range: {
+				start: copyPosition(position),
+				end: copyPosition(position),
+			},
+		}) - 1;
+		stack.push({ kind: "end-node", active, resultIndex }, current.content);
+	}
 	return { code, positions };
 }

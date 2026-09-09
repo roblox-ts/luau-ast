@@ -2,7 +2,7 @@ import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
-import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { concat, flattenFragment, markClosing, markNode, RenderFragment } from "LuauRenderer/Fragment";
 
 const INDENT_CHARACTER = "\t";
 const INDENT_CHARACTER_LENGTH = INDENT_CHARACTER.length;
@@ -14,6 +14,8 @@ export class RenderState {
 	private indent = "";
 	public seenTempNodes = new Map<number, string>();
 	private readonly listNodesStack = new Array<luau.ListNode<luau.Statement>>();
+
+	public constructor(public readonly includePositions = false) {}
 
 	/**
 	 * Pushes an indent to the current indent level.
@@ -70,7 +72,7 @@ export class RenderState {
 	 * @param text The text.
 	 */
 	public newline(text: string) {
-		return text + "\n";
+		return flattenFragment(this.fragmentNewline(text)).code;
 	}
 
 	/**
@@ -78,7 +80,7 @@ export class RenderState {
 	 * @param text The text.
 	 */
 	public indented(text: string) {
-		return this.indent + text;
+		return flattenFragment(this.fragmentIndented(text)).code;
 	}
 
 	/**
@@ -87,12 +89,7 @@ export class RenderState {
 	 * @param endNode Node used to determine if a semicolon should be added. Undefined means no semi will be added.
 	 */
 	public line(text: string, endNode?: luau.Statement) {
-		let result = this.indented(text);
-		if (endNode) {
-			result += getEnding(this, endNode);
-		}
-		result = this.newline(result);
-		return result;
+		return flattenFragment(this.fragmentLine(text, endNode)).code;
 	}
 
 	/**
@@ -118,10 +115,11 @@ export class RenderState {
 		return concat(this.fragmentIndented(text), endNode ? getEnding(this, endNode) : "", "\n");
 	}
 
-	public fragmentBlock(callback: () => RenderFragment): RenderFragment {
-		this.pushIndent();
-		const result = callback();
-		this.popIndent();
-		return result;
+	public fragmentClosing(node: luau.Node): RenderFragment {
+		return this.includePositions ? markClosing(node) : "";
+	}
+
+	public fragmentNode(node: luau.Node, content: RenderFragment): RenderFragment {
+		return this.includePositions ? markNode(node, content) : content;
 	}
 }
