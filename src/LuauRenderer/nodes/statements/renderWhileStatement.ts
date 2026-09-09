@@ -8,7 +8,6 @@ export function renderWhileStatement(state: RenderState, node: luau.WhileStateme
 	return concat(
 		state.fragmentLine(concat("while ", renderNode(state, node.condition), " do")),
 		state.block(() => renderStatementsFragment(state, node.statements)),
-		state.fragmentClosing(node),
-		state.fragmentLine("end"),
+		state.fragmentClosingLine(node, "end"),
 	);
 }

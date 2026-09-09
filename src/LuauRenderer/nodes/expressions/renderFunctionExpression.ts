@@ -12,7 +12,6 @@ export function renderFunctionExpression(state: RenderState, node: luau.Function
 	return concat(
 		state.fragmentNewline(concat("function(", renderParametersFragment(state, node), ")")),
 		state.block(() => renderStatementsFragment(state, node.statements)),
-		state.fragmentClosing(node),
-		state.fragmentIndented("end"),
+		state.fragmentIndented(concat(state.fragmentClosing(node), "end")),
 	);
 }

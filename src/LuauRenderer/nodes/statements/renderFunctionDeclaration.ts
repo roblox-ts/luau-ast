@@ -21,7 +21,6 @@ export function renderFunctionDeclaration(state: RenderState, node: luau.Functio
 			),
 		),
 		state.block(() => renderStatementsFragment(state, node.statements)),
-		state.fragmentClosing(node),
-		state.fragmentLine("end"),
+		state.fragmentClosingLine(node, "end"),
 	);
 }

@@ -36,7 +36,6 @@ export function renderIfStatement(state: RenderState, node: luau.IfStatement) {
 		state.fragmentLine(concat("if ", renderNode(state, node.condition), " then")),
 		state.block(() => renderStatementsFragment(state, node.statements)),
 		alternative,
-		state.fragmentClosing(node),
-		state.fragmentLine("end"),
+		state.fragmentClosingLine(node, "end"),
 	);
 }

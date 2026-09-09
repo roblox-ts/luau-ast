@@ -8,7 +8,6 @@ export function renderRepeatStatement(state: RenderState, node: luau.RepeatState
 	return concat(
 		state.fragmentLine("repeat"),
 		state.block(() => renderStatementsFragment(state, node.statements)),
-		state.fragmentClosing(node),
-		state.fragmentLine(concat("until ", renderNode(state, node.condition))),
+		state.fragmentClosingLine(node, concat("until ", renderNode(state, node.condition))),
 	);
 }

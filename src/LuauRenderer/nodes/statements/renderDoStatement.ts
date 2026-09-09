@@ -7,7 +7,6 @@ export function renderDoStatement(state: RenderState, node: luau.DoStatement) {
 	return concat(
 		state.fragmentLine("do"),
 		state.block(() => renderStatementsFragment(state, node.statements)),
-		state.fragmentClosing(node),
-		state.fragmentLine("end"),
+		state.fragmentClosingLine(node, "end"),
 	);
 }

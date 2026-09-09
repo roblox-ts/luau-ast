@@ -119,6 +119,10 @@ export class RenderState {
 		return this.includePositions ? markClosing(node) : "";
 	}
 
+	public fragmentClosingLine(node: luau.Node, text: RenderFragment): RenderFragment {
+		return this.fragmentLine(concat(this.fragmentClosing(node), text));
+	}
+
 	public fragmentNode(node: luau.Node, content: RenderFragment): RenderFragment {
 		return this.includePositions ? markNode(node, content) : content;
 	}

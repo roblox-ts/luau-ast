@@ -103,6 +103,58 @@ test("reports empty function closings and empty table ranges", () => {
 	});
 });
 
+test("reports closing keywords after indentation in nested blocks", () => {
+	const innerDo = luau.create(luau.SyntaxKind.DoStatement, {
+		statements: luau.list.make(luau.comment(" do body")),
+	});
+	const whileStatement = luau.create(luau.SyntaxKind.WhileStatement, {
+		condition: luau.bool(true),
+		statements: luau.list.make(luau.comment(" while body")),
+	});
+	const functionDeclaration = luau.create(luau.SyntaxKind.FunctionDeclaration, {
+		localize: true,
+		name: luau.id("declared"),
+		parameters: luau.list.make(),
+		hasDotDotDot: false,
+		statements: luau.list.make(luau.comment(" function body")),
+	});
+	const repeatStatement = luau.create(luau.SyntaxKind.RepeatStatement, {
+		condition: luau.bool(true),
+		statements: luau.list.make(luau.comment(" repeat body")),
+	});
+	const functionExpression = luau.create(luau.SyntaxKind.FunctionExpression, {
+		parameters: luau.list.make(),
+		hasDotDotDot: false,
+		statements: luau.list.make(luau.comment(" callback body")),
+	});
+	const outerDo = luau.create(luau.SyntaxKind.DoStatement, {
+		statements: luau.list.make(
+			innerDo,
+			whileStatement,
+			functionDeclaration,
+			repeatStatement,
+			luau.create(luau.SyntaxKind.VariableDeclaration, {
+				left: luau.id("callback"),
+				right: functionExpression,
+			}),
+		),
+	});
+
+	const rendered = luauModule.renderASTWithPositions(luau.list.make(outerDo));
+	const closingOf = node => rendered.positions.find(position => position.node === node).range.closing;
+
+	assert.equal(
+		rendered.code,
+		"do\n\tdo\n\t\t-- do body\n\tend\n\twhile true do\n\t\t-- while body\n\tend\n\tlocal function declared()\n\t\t-- function body\n\tend\n\trepeat\n\t\t-- repeat body\n\tuntil true\n\tlocal callback = function()\n\t\t-- callback body\n\tend\nend\n",
+	);
+	assert.deepEqual(closingOf(innerDo), { line: 3, column: 1 });
+	assert.deepEqual(closingOf(whileStatement), { line: 6, column: 1 });
+	assert.deepEqual(closingOf(functionDeclaration), { line: 9, column: 1 });
+	assert.deepEqual(closingOf(repeatStatement), { line: 12, column: 1 });
+	assert.deepEqual(closingOf(functionExpression), { line: 15, column: 1 });
+	assert.deepEqual(closingOf(outerDo), { line: 16, column: 0 });
+});
+
 test("gives elseif occurrences their own range and the outer if its shared closing", () => {
 	const elseifNode = luau.create(luau.SyntaxKind.IfStatement, {
 		condition: luau.bool(false),

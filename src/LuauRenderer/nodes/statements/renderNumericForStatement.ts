@@ -15,7 +15,6 @@ export function renderNumericForStatement(state: RenderState, node: luau.Numeric
 	return concat(
 		state.fragmentLine(concat("for ", renderNode(state, node.id), " = ", predicate, " do")),
 		state.block(() => renderStatementsFragment(state, node.statements)),
-		state.fragmentClosing(node),
-		state.fragmentLine("end"),
+		state.fragmentClosingLine(node, "end"),
 	);
 }
