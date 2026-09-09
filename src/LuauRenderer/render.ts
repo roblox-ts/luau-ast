@@ -1,6 +1,7 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
 import { getKindName } from "LuauAST/util/getKindName";
+import { flattenFragment, markNode, RenderedNodePosition, RenderFragment } from "LuauRenderer/Fragment";
 import { renderCallExpression } from "LuauRenderer/nodes/expressions/indexable/renderCallExpression";
 import { renderComputedIndexExpression } from "LuauRenderer/nodes/expressions/indexable/renderComputedIndexExpression";
 import { renderIdentifier } from "LuauRenderer/nodes/expressions/indexable/renderIdentifier";
@@ -36,7 +37,6 @@ import { renderRepeatStatement } from "LuauRenderer/nodes/statements/renderRepea
 import { renderReturnStatement } from "LuauRenderer/nodes/statements/renderReturnStatement";
 import { renderVariableDeclaration } from "LuauRenderer/nodes/statements/renderVariableDeclaration";
 import { renderWhileStatement } from "LuauRenderer/nodes/statements/renderWhileStatement";
-import { flattenFragment, markNode, RenderedNodePosition, RenderFragment } from "LuauRenderer/Fragment";
 import { RenderState } from "LuauRenderer/RenderState";
 import { solveTempIds } from "LuauRenderer/solveTempIds";
 import { identity } from "LuauRenderer/util/identity";

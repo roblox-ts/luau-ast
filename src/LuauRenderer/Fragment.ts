@@ -152,13 +152,14 @@ export function flattenFragment(fragment: RenderFragment, includePositions = fal
 
 		const active: { node: luau.Node; closing?: GeneratedPosition } = { node: current.node };
 		activeNodes.push(active);
-		const resultIndex = positions.push({
-			node: current.node,
-			range: {
-				start: copyPosition(position),
-				end: copyPosition(position),
-			},
-		}) - 1;
+		const resultIndex =
+			positions.push({
+				node: current.node,
+				range: {
+					start: copyPosition(position),
+					end: copyPosition(position),
+				},
+			}) - 1;
 		stack.push({ kind: "end-node", active, resultIndex }, current.content);
 	}
 	return { code, positions };

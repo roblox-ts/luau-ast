@@ -7,7 +7,7 @@ const luau = luauModule.default;
 test("node origins survive the package's shallow clone paths", () => {
 	const origin = {
 		start: { line: 4, column: 2 },
-		end: { line: 4, column: 7 },
+		closing: { line: 4, column: 7 },
 	};
 	const identifier = luauModule.setNodeOrigin(luau.id("value"), origin);
 	luau.create(luau.SyntaxKind.VariableDeclaration, { left: identifier, right: undefined });

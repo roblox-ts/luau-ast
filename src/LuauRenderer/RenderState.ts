@@ -1,8 +1,8 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
+import { concat, flattenFragment, markClosing, markNode, RenderFragment } from "LuauRenderer/Fragment";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
-import { concat, flattenFragment, markClosing, markNode, RenderFragment } from "LuauRenderer/Fragment";
 
 const INDENT_CHARACTER = "\t";
 const INDENT_CHARACTER_LENGTH = INDENT_CHARACTER.length;
