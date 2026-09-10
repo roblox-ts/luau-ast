@@ -10,11 +10,13 @@ export interface BaseIndexableExpression<
 	T extends keyof luau.IndexableExpressionByKind = keyof luau.IndexableExpressionByKind,
 > extends luau.BaseNode<T> {}
 
-export interface BaseExpression<T extends keyof luau.ExpressionByKind = keyof luau.ExpressionByKind>
-	extends luau.BaseNode<T> {}
+export interface BaseExpression<
+	T extends keyof luau.ExpressionByKind = keyof luau.ExpressionByKind,
+> extends luau.BaseNode<T> {}
 
-export interface BaseStatement<T extends keyof luau.StatementByKind = keyof luau.StatementByKind>
-	extends luau.BaseNode<T> {}
+export interface BaseStatement<
+	T extends keyof luau.StatementByKind = keyof luau.StatementByKind,
+> extends luau.BaseNode<T> {}
 
 export interface BaseField<T extends keyof luau.FieldByKind = keyof luau.FieldByKind> extends luau.BaseNode<T> {}
 
@@ -53,6 +55,7 @@ export interface NumberLiteral extends luau.BaseExpression<luau.SyntaxKind.Numbe
 
 export interface StringLiteral extends luau.BaseExpression<luau.SyntaxKind.StringLiteral> {
 	value: string;
+	quote?: '"' | "'";
 }
 
 export interface VarArgsLiteral extends luau.BaseExpression<luau.SyntaxKind.VarArgsLiteral> {}
