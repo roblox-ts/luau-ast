@@ -43,6 +43,17 @@ export enum SyntaxKind {
 	ReturnStatement,
 	Comment,
 
+	// types
+	TypeIdentifier,
+	TypeMixedTable,
+	TypeMixedTableField,
+	TypeMixedTableIndexedField,
+	TypeFunction,
+	TypeParameter,
+	TypeTypeOf,
+	TypeStatement,
+	TypeCast,
+
 	// fields
 	MapField,
 	InterpolatedStringPart,

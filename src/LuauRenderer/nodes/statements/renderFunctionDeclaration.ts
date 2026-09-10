@@ -12,7 +12,9 @@ export function renderFunctionDeclaration(state: RenderState, node: luau.Functio
 	const paramStr = renderParameters(state, node);
 
 	let result = "";
-	result += state.line(`${node.localize ? "local " : ""}function ${nameStr}(${paramStr})`);
+	result += state.line(
+		`${node.localize ? "local " : ""}function ${nameStr}(${paramStr})${node.returnType ? `: ${render(state, node.returnType)}` : ""}`,
+	);
 	result += state.block(() => renderStatements(state, node.statements));
 	result += state.line(`end`);
 	return result;
