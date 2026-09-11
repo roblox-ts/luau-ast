@@ -1,22 +1,23 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { concat, RenderFragment, sequence } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 
 export function renderInterpolatedString(state: RenderState, node: luau.InterpolatedString) {
-	let result = "`";
+	const result = new Array<RenderFragment>("`");
 	luau.list.forEach(node.parts, part => {
-		let expressionStr = render(state, part);
+		let expression = renderNode(state, part);
 		if (luau.isInterpolatedStringPart(part)) {
-			result += expressionStr;
+			result.push(expression);
 		} else {
-			result += "{";
+			result.push("{");
 			// `{{}}` is invalid, so we wrap it in parenthesis
 			if (luau.isTable(part)) {
-				expressionStr = `(${expressionStr})`;
+				expression = concat("(", expression, ")");
 			}
-			result += expressionStr;
-			result += "}";
+			result.push(expression, "}");
 		}
 	});
-	result += "`";
-	return result;
+	result.push("`");
+	return sequence(result);
 }

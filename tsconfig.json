@@ -5,6 +5,7 @@
 		"module": "commonjs",
 		"target": "ES2019",
 		"lib": ["ES2019"],
+		"types": ["node"],
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"strictNullChecks": true,

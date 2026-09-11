@@ -1,12 +1,22 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
-import { renderParameters } from "LuauRenderer/util/renderParameters";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { concat } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
+import { renderParametersFragment } from "LuauRenderer/util/renderParameters";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderMethodDeclaration(state: RenderState, node: luau.MethodDeclaration) {
-	let result = "";
-	result += state.line(`function ${render(state, node.expression)}:${node.name}(${renderParameters(state, node)})`);
-	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line(`end`);
-	return result;
+	return concat(
+		state.fragmentLine(
+			concat(
+				"function ",
+				renderNode(state, node.expression),
+				`:${node.name}(`,
+				renderParametersFragment(state, node),
+				")",
+			),
+		),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.fragmentClosingLine(node, "end"),
+	);
 }

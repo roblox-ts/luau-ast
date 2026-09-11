@@ -1,12 +1,18 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 import { needsParentheses } from "LuauRenderer/util/needsParentheses";
 
 export function renderBinaryExpression(state: RenderState, node: luau.BinaryExpression) {
-	let result = `${render(state, node.left)} ${node.operator} ${render(state, node.right)}`;
+	let result: RenderFragment = concat(
+		renderNode(state, node.left),
+		` ${node.operator} `,
+		renderNode(state, node.right),
+	);
 
 	if (needsParentheses(node)) {
-		result = `(${result})`;
+		result = concat("(", result, ")");
 	}
 
 	return result;

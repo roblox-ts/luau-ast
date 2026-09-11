@@ -1,6 +1,8 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
-import { render, RenderState } from "LuauRenderer";
+import { flattenFragment, RenderFragment, sequence } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 
 /**
  * Renders the given list of statements.
@@ -10,7 +12,12 @@ import { render, RenderState } from "LuauRenderer";
  * Useful for getting the next or previous sibling statement.
  */
 export function renderStatements(state: RenderState, statements: luau.List<luau.Statement>) {
-	let result = "";
+	return flattenFragment(renderStatementsFragment(state, statements)).code;
+}
+
+/** @internal */
+export function renderStatementsFragment(state: RenderState, statements: luau.List<luau.Statement>): RenderFragment {
+	let result: string | Array<RenderFragment> = state.includePositions ? new Array<RenderFragment>() : "";
 	let listNode = statements.head;
 	let hasFinalStatement = false;
 	while (listNode !== undefined) {
@@ -21,10 +28,15 @@ export function renderStatements(state: RenderState, statements: luau.List<luau.
 		hasFinalStatement ||= luau.isFinalStatement(listNode.value);
 
 		state.pushListNode(listNode);
-		result += render(state, listNode.value);
+		const statement = renderNode(state, listNode.value);
+		if (typeof result === "string") {
+			result += statement as string;
+		} else {
+			result.push(statement);
+		}
 		state.popListNode();
 
 		listNode = listNode.next;
 	}
-	return result;
+	return typeof result === "string" ? result : sequence(result);
 }

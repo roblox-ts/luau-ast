@@ -1,26 +1,34 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
-import { render, RenderState } from "LuauRenderer";
+import { concat, join, RenderFragment } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 
 export function renderVariableDeclaration(state: RenderState, node: luau.VariableDeclaration) {
-	let leftStr: string;
+	let left: RenderFragment;
 	if (luau.list.isList(node.left)) {
 		assert(!luau.list.isEmpty(node.left));
-		leftStr = luau.list.mapToArray(node.left, id => render(state, id)).join(", ");
+		left = join(
+			luau.list.mapToArray(node.left, identifier => renderNode(state, identifier)),
+			", ",
+		);
 	} else {
-		leftStr = render(state, node.left);
+		left = renderNode(state, node.left);
 	}
 
 	if (node.right) {
-		let rightStr: string;
+		let right: RenderFragment;
 		if (luau.list.isList(node.right)) {
 			assert(!luau.list.isEmpty(node.right));
-			rightStr = luau.list.mapToArray(node.right, expression => render(state, expression)).join(", ");
+			right = join(
+				luau.list.mapToArray(node.right, expression => renderNode(state, expression)),
+				", ",
+			);
 		} else {
-			rightStr = render(state, node.right);
+			right = renderNode(state, node.right);
 		}
-		return state.line(`local ${leftStr} = ${rightStr}`, node);
+		return state.fragmentLine(concat("local ", left, " = ", right), node);
 	} else {
-		return state.line(`local ${leftStr}`, node);
+		return state.fragmentLine(concat("local ", left), node);
 	}
 }

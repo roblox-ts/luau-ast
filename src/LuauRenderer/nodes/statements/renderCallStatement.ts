@@ -1,6 +1,7 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
 
 export function renderCallStatement(state: RenderState, node: luau.CallStatement) {
-	return state.line(`${render(state, node.expression)}`, node);
+	return state.fragmentLine(renderNode(state, node.expression), node);
 }

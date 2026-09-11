@@ -1,28 +1,41 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { renderNode } from "LuauRenderer/render";
+import { RenderState } from "LuauRenderer/RenderState";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderIfStatement(state: RenderState, node: luau.IfStatement) {
-	let result = "";
-
-	result += state.line(`if ${render(state, node.condition)} then`);
-	result += state.block(() => renderStatements(state, node.statements));
-
+	const alternatives = new Array<{ node: luau.IfStatement; content: RenderFragment }>();
 	let currentElseBody = node.elseBody;
 	while (luau.isNode(currentElseBody)) {
-		const statements = currentElseBody.statements;
-		result += state.line(`elseif ${render(state, currentElseBody.condition)} then`);
-		result += state.block(() => renderStatements(state, statements));
+		const elseifNode = currentElseBody;
+		alternatives.push({
+			node: elseifNode,
+			content: concat(
+				state.fragmentLine(concat("elseif ", renderNode(state, elseifNode.condition), " then")),
+				state.block(() => renderStatementsFragment(state, elseifNode.statements)),
+			),
+		});
 		currentElseBody = currentElseBody.elseBody;
 	}
 
+	let alternative: RenderFragment = "";
 	if (currentElseBody && luau.list.isNonEmpty(currentElseBody)) {
-		result += state.line(`else`);
-		const statements = currentElseBody;
-		result += state.block(() => renderStatements(state, statements));
+		const elseStatements = currentElseBody;
+		alternative = concat(
+			state.fragmentLine("else"),
+			state.block(() => renderStatementsFragment(state, elseStatements)),
+		);
+	}
+	for (let index = alternatives.length - 1; index >= 0; index--) {
+		const elseifNode = alternatives[index];
+		alternative = state.fragmentNode(elseifNode.node, concat(elseifNode.content, alternative));
 	}
 
-	result += state.line(`end`);
-
-	return result;
+	return concat(
+		state.fragmentLine(concat("if ", renderNode(state, node.condition), " then")),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		alternative,
+		state.fragmentClosingLine(node, "end"),
+	);
 }

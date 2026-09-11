@@ -9,9 +9,11 @@
 	},
 	"scripts": {
 		"prepublishOnly": "npm run build",
+		"prepare": "npm run build",
 		"build": "tspc -b",
 		"build-watch": "tspc -b -w",
-		"eslint": "eslint \"src/**/*.ts\" --max-warnings 0"
+		"eslint": "eslint \"src/**/*.ts\" --max-warnings 0",
+		"test": "npm run build && node --test tests/*.test.js"
 	},
 	"author": "",
 	"license": "MIT",
