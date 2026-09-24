@@ -1,28 +1,40 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat, RenderFragment } from "LuauRenderer/Fragment";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderIfStatement(state: RenderState, node: luau.IfStatement) {
-	let result = "";
+	const head = concat(
+		state.lineFragment(concat("if ", renderNode(state, node.condition), " then")),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+	);
 
-	result += state.line(`if ${render(state, node.condition)} then`);
-	result += state.block(() => renderStatements(state, node.statements));
-
+	const elseIfs = new Array<[luau.IfStatement, RenderFragment]>();
 	let currentElseBody = node.elseBody;
 	while (luau.isNode(currentElseBody)) {
 		const statements = currentElseBody.statements;
-		result += state.line(`elseif ${render(state, currentElseBody.condition)} then`);
-		result += state.block(() => renderStatements(state, statements));
+		const elseIfHead = concat(
+			state.lineFragment(concat("elseif ", renderNode(state, currentElseBody.condition), " then")),
+			state.block(() => renderStatementsFragment(state, statements)),
+		);
+		elseIfs.push([currentElseBody, elseIfHead]);
 		currentElseBody = currentElseBody.elseBody;
 	}
 
+	let tail: RenderFragment = "";
 	if (currentElseBody && luau.list.isNonEmpty(currentElseBody)) {
-		result += state.line(`else`);
 		const statements = currentElseBody;
-		result += state.block(() => renderStatements(state, statements));
+		tail = concat(
+			state.lineFragment(`else`),
+			state.block(() => renderStatementsFragment(state, statements)),
+		);
 	}
 
-	result += state.line(`end`);
+	// each `elseif` is a nested luau.IfStatement which includes all of the branches after it
+	for (let i = elseIfs.length - 1; i >= 0; i--) {
+		const [elseIf, elseIfHead] = elseIfs[i];
+		tail = state.markNode(elseIf, concat(elseIfHead, tail));
+	}
 
-	return result;
+	return concat(head, tail, state.lineFragment(concat(state.markClosing(node), "end")));
 }

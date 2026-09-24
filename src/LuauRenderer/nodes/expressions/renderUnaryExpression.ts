@@ -1,5 +1,6 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat } from "LuauRenderer/Fragment";
 import { needsParentheses } from "LuauRenderer/util/needsParentheses";
 
 function needsSpace(node: luau.UnaryExpression) {
@@ -23,9 +24,9 @@ export function renderUnaryExpression(state: RenderState, node: luau.UnaryExpres
 		opStr += " ";
 	}
 
-	let result = `${opStr}${render(state, node.expression)}`;
+	let result = concat(opStr, renderNode(state, node.expression));
 	if (needsParentheses(node)) {
-		result = `(${result})`;
+		result = concat("(", result, ")");
 	}
 
 	return result;

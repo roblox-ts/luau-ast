@@ -1,23 +1,30 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat, join, RenderFragment } from "LuauRenderer/Fragment";
 
 export function renderAssignment(state: RenderState, node: luau.Assignment) {
-	let leftStr: string;
+	let left: RenderFragment;
 	if (luau.list.isList(node.left)) {
 		assert(!luau.list.isEmpty(node.left));
-		leftStr = luau.list.mapToArray(node.left, id => render(state, id)).join(", ");
+		left = join(
+			luau.list.mapToArray(node.left, id => renderNode(state, id)),
+			", ",
+		);
 	} else {
-		leftStr = render(state, node.left);
+		left = renderNode(state, node.left);
 	}
 
-	let rightStr: string;
+	let right: RenderFragment;
 	if (luau.list.isList(node.right)) {
 		assert(!luau.list.isEmpty(node.right));
-		rightStr = luau.list.mapToArray(node.right, expression => render(state, expression)).join(", ");
+		right = join(
+			luau.list.mapToArray(node.right, expression => renderNode(state, expression)),
+			", ",
+		);
 	} else {
-		rightStr = render(state, node.right);
+		right = renderNode(state, node.right);
 	}
 
-	return state.line(`${leftStr} ${node.operator} ${rightStr}`, node);
+	return state.lineFragment(concat(left, ` ${node.operator} `, right), node);
 }

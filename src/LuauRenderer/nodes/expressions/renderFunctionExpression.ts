@@ -1,16 +1,17 @@
 import luau from "LuauAST";
 import { RenderState } from "LuauRenderer";
+import { concat } from "LuauRenderer/Fragment";
 import { renderParameters } from "LuauRenderer/util/renderParameters";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderFunctionExpression(state: RenderState, node: luau.FunctionExpression) {
 	if (luau.list.isEmpty(node.statements)) {
-		return `function(${renderParameters(state, node)}) end`;
+		return concat("function(", renderParameters(state, node), ") ", state.markClosing(node), "end");
 	}
 
-	let result = "";
-	result += state.newline(`function(${renderParameters(state, node)})`);
-	result += state.block(() => renderStatements(state, node.statements));
-	result += state.indented(`end`);
-	return result;
+	return concat(
+		state.newlineFragment(concat("function(", renderParameters(state, node), ")")),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.indentedFragment(concat(state.markClosing(node), "end")),
+	);
 }

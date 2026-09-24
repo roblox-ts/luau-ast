@@ -1,5 +1,6 @@
 import luau from "LuauAST";
 import { assert } from "LuauAST/util/assert";
+import { concat, markClosing, markLayout, markNode, RenderFragment } from "LuauRenderer/Fragment";
 import { getEnding } from "LuauRenderer/util/getEnding";
 import { getOrSetDefault } from "LuauRenderer/util/getOrSetDefault";
 
@@ -13,6 +14,11 @@ export class RenderState {
 	private indent = "";
 	public seenTempNodes = new Map<number, string>();
 	private readonly listNodesStack = new Array<luau.ListNode<luau.Statement>>();
+
+	/**
+	 * @param includePositions Whether to mark nodes in rendered fragments so their positions can be measured.
+	 */
+	public constructor(public readonly includePositions = false) {}
 
 	/**
 	 * Pushes an indent to the current indent level.
@@ -103,5 +109,50 @@ export class RenderState {
 		const result = callback();
 		this.popIndent();
 		return result;
+	}
+
+	/**
+	 * Marks `text` as whitespace which separates code and is not part of any node's range.
+	 */
+	public layout(text: string) {
+		return this.includePositions && text !== "" ? markLayout(text) : text;
+	}
+
+	/**
+	 * Like `newline()`, but for fragments.
+	 */
+	public newlineFragment(fragment: RenderFragment) {
+		return concat(fragment, this.layout("\n"));
+	}
+
+	/**
+	 * Like `indented()`, but for fragments.
+	 */
+	public indentedFragment(fragment: RenderFragment) {
+		return concat(this.layout(this.indent), fragment);
+	}
+
+	/**
+	 * Like `line()`, but for fragments.
+	 */
+	public lineFragment(fragment: RenderFragment, endNode?: luau.Statement) {
+		if (endNode) {
+			fragment = concat(fragment, getEnding(this, endNode));
+		}
+		return this.newlineFragment(this.indentedFragment(fragment));
+	}
+
+	/**
+	 * Marks `content` as the rendered code of `node`.
+	 */
+	public markNode(node: luau.Node, content: RenderFragment) {
+		return this.includePositions ? markNode(node, content) : content;
+	}
+
+	/**
+	 * Marks where the closing keyword of `node`, like `end` or `until`, begins.
+	 */
+	public markClosing(node: luau.Node) {
+		return this.includePositions ? markClosing(node) : "";
 	}
 }

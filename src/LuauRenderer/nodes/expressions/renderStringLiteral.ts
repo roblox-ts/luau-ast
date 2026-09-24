@@ -1,5 +1,6 @@
 import luau from "LuauAST";
 import { RenderState } from "LuauRenderer";
+import { concat } from "LuauRenderer/Fragment";
 import { getSafeBracketEquals } from "LuauRenderer/util/getSafeBracketEquals";
 
 // separates long-bracket string delimiters from surrounding indexing brackets to avoid ambiguous syntax
@@ -39,7 +40,7 @@ export function renderStringLiteral(state: RenderState, node: luau.StringLiteral
 		return `'${node.value}'`;
 	} else {
 		const eqStr = getSafeBracketEquals(node.value);
-		const spacing = needsBracketSpacing(node) ? " " : "";
-		return `${spacing}[${eqStr}[${node.value}]${eqStr}]${spacing}`;
+		const spacing = needsBracketSpacing(node) ? state.layout(" ") : "";
+		return concat(spacing, `[${eqStr}[${node.value}]${eqStr}]`, spacing);
 	}
 }

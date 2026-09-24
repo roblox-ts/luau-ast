@@ -5,6 +5,12 @@ type AllowedFieldTypes = luau.BaseNode | luau.List<luau.BaseNode> | boolean | nu
 type FilterProps<T, U> = { [K in keyof T]: T[K] extends U ? T[K] : never };
 type FilteredNodeByKind<T extends keyof luau.NodeByKind> = FilterProps<luau.NodeByKind[T], AllowedFieldTypes>;
 
+/** Sets the location in the original source that `node` was created from and returns `node` */
+export function setNodeOrigin<T extends luau.Node>(node: T, origin: luau.NodeOrigin): T {
+	node.origin = origin;
+	return node;
+}
+
 // creation
 export function create<T extends keyof luau.NodeByKind>(
 	kind: T,

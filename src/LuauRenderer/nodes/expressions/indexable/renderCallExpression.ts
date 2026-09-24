@@ -1,7 +1,8 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat } from "LuauRenderer/Fragment";
 import { renderArguments } from "LuauRenderer/util/renderArguments";
 
 export function renderCallExpression(state: RenderState, node: luau.CallExpression) {
-	return `${render(state, node.expression)}(${renderArguments(state, node.args)})`;
+	return concat(renderNode(state, node.expression), "(", renderArguments(state, node.args), ")");
 }

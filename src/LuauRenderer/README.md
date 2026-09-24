@@ -8,6 +8,8 @@ This project takes a Luau AST (from LuauAST) and converts it into Luau source co
 
 **RenderState.ts** - stores the current state of the render process, instance is passed into every `renderX()` function
 
-**nodes/** - folder containing modules that each export a `renderX(state: RenderState, node: luau.X): string` function
+**Fragment.ts** - builds rendered code which can be marked with node positions, and turns it into a string
+
+**nodes/** - folder containing modules that each export a `renderX(state: RenderState, node: luau.X): RenderFragment` function
 
 **util/** - various helper modules to aid in rendering

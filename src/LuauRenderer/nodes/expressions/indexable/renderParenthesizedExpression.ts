@@ -1,5 +1,6 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat } from "LuauRenderer/Fragment";
 
 export function renderParenthesizedExpression(state: RenderState, node: luau.ParenthesizedExpression) {
 	// skip nested parentheses
@@ -8,8 +9,8 @@ export function renderParenthesizedExpression(state: RenderState, node: luau.Par
 		expression = expression.expression;
 	}
 	if (luau.isSimple(expression)) {
-		return render(state, node.expression);
+		return renderNode(state, node.expression);
 	} else {
-		return `(${render(state, node.expression)})`;
+		return concat("(", renderNode(state, node.expression), ")");
 	}
 }

@@ -1,11 +1,12 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat } from "LuauRenderer/Fragment";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderWhileStatement(state: RenderState, node: luau.WhileStatement) {
-	let result = "";
-	result += state.line(`while ${render(state, node.condition)} do`);
-	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line(`end`);
-	return result;
+	return concat(
+		state.lineFragment(concat("while ", renderNode(state, node.condition), " do")),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.lineFragment(concat(state.markClosing(node), "end")),
+	);
 }

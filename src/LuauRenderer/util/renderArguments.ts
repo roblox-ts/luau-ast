@@ -1,7 +1,11 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { join } from "LuauRenderer/Fragment";
 
-/** Renders the given list of expressions into a string separated by commas */
+/** Renders the given list of expressions into a fragment separated by commas */
 export function renderArguments(state: RenderState, expressions: luau.List<luau.Expression>) {
-	return luau.list.mapToArray(expressions, v => render(state, v)).join(", ");
+	return join(
+		luau.list.mapToArray(expressions, v => renderNode(state, v)),
+		", ",
+	);
 }

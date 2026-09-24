@@ -1,16 +1,19 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat, RenderFragment, sequence } from "LuauRenderer/Fragment";
 
 export function renderMixedTable(state: RenderState, node: luau.MixedTable) {
 	if (luau.list.isEmpty(node.fields)) {
 		return "{}";
 	}
 
-	let result = "{\n";
+	const result = new Array<RenderFragment>(state.newlineFragment("{"));
 	state.block(() => {
 		// temp fix for https://github.com/microsoft/TypeScript/issues/42932
-		luau.list.forEach(node.fields, field => (result += state.line(`${render(state, field as luau.Node)},`)));
+		luau.list.forEach(node.fields, field =>
+			result.push(state.lineFragment(concat(renderNode(state, field as luau.Node), ","))),
+		);
 	});
-	result += state.indented("}");
-	return result;
+	result.push(state.indentedFragment("}"));
+	return sequence(result);
 }

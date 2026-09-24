@@ -1,9 +1,13 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat, join } from "LuauRenderer/Fragment";
 
 export function renderReturnStatement(state: RenderState, node: luau.ReturnStatement) {
-	const expStr = luau.list.isList(node.expression)
-		? luau.list.mapToArray(node.expression, exp => render(state, exp)).join(", ")
-		: render(state, node.expression);
-	return state.line(`return ${expStr}`);
+	const exp = luau.list.isList(node.expression)
+		? join(
+				luau.list.mapToArray(node.expression, exp => renderNode(state, exp)),
+				", ",
+			)
+		: renderNode(state, node.expression);
+	return state.lineFragment(concat("return ", exp));
 }

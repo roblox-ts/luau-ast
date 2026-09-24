@@ -1,15 +1,20 @@
 import luau from "LuauAST";
-import { render, RenderState } from "LuauRenderer";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { renderNode, RenderState } from "LuauRenderer";
+import { concat, join } from "LuauRenderer/Fragment";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderForStatement(state: RenderState, node: luau.ForStatement) {
-	const idsStr = luau.list.mapToArray(node.ids, id => render(state, id)).join(", ") || "_";
-	const expStr = render(state, node.expression);
+	const ids = luau.list.isEmpty(node.ids)
+		? "_"
+		: join(
+				luau.list.mapToArray(node.ids, id => renderNode(state, id)),
+				", ",
+			);
+	const exp = renderNode(state, node.expression);
 
-	let result = "";
-	result += state.line(`for ${idsStr} in ${expStr} do`);
-	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line(`end`);
-
-	return result;
+	return concat(
+		state.lineFragment(concat("for ", ids, " in ", exp, " do")),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.lineFragment(concat(state.markClosing(node), "end")),
+	);
 }

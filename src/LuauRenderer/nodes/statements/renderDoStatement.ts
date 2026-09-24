@@ -1,11 +1,12 @@
 import luau from "LuauAST";
 import { RenderState } from "LuauRenderer";
-import { renderStatements } from "LuauRenderer/util/renderStatements";
+import { concat } from "LuauRenderer/Fragment";
+import { renderStatementsFragment } from "LuauRenderer/util/renderStatements";
 
 export function renderDoStatement(state: RenderState, node: luau.DoStatement) {
-	let result = "";
-	result += state.line(`do`);
-	result += state.block(() => renderStatements(state, node.statements));
-	result += state.line(`end`);
-	return result;
+	return concat(
+		state.lineFragment(`do`),
+		state.block(() => renderStatementsFragment(state, node.statements)),
+		state.lineFragment(concat(state.markClosing(node), "end")),
+	);
 }
