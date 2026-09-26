@@ -143,6 +143,36 @@ const KIND_TO_VISITOR = identity<{ [K in luau.SyntaxKind]: VisitStrategy<K> }>({
 		visitNode(node.value, visitor);
 	},
 	[luau.SyntaxKind.InterpolatedStringPart]: NOOP,
+
+	// types
+	[luau.SyntaxKind.TypeIdentifier]: NOOP,
+	[luau.SyntaxKind.TypeFunction]: (node, visitor) => {
+		if (node.parameters) {
+			visitList(node.parameters, visitor);
+		}
+		if (node.returnType) {
+			visitNode(node.returnType, visitor);
+		}
+	},
+	[luau.SyntaxKind.TypeParameter]: (node, visitor) => visitNode(node.value, visitor),
+	[luau.SyntaxKind.TypeMixedTable]: (node, visitor) => visitList(node.fields, visitor),
+	[luau.SyntaxKind.TypeMixedTableField]: (node, visitor) => {
+		visitNode(node.index, visitor);
+		visitNode(node.value, visitor);
+	},
+	[luau.SyntaxKind.TypeMixedTableIndexedField]: (node, visitor) => {
+		visitNode(node.index, visitor);
+		visitNode(node.value, visitor);
+	},
+	[luau.SyntaxKind.TypeTypeOf]: (node, visitor) => visitNode(node.expression, visitor),
+	[luau.SyntaxKind.TypeStatement]: (node, visitor) => {
+		visitNode(node.identifier, visitor);
+		visitNode(node.expression, visitor);
+	},
+	[luau.SyntaxKind.TypeCast]: (node, visitor) => {
+		visitNode(node.expression, visitor);
+		visitNode(node.type, visitor);
+	},
 });
 
 function visitNode(node: luau.Node, visitor: Visitor) {

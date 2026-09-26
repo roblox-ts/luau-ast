@@ -27,6 +27,7 @@ export interface ExpressionByKind extends IndexableExpressionByKind {
 	[luau.SyntaxKind.Map]: luau.Map;
 	[luau.SyntaxKind.Set]: luau.Set;
 	[luau.SyntaxKind.MixedTable]: luau.MixedTable;
+	[luau.SyntaxKind.TypeCast]: luau.TypeCast;
 }
 
 export interface StatementByKind {
@@ -45,6 +46,7 @@ export interface StatementByKind {
 	[luau.SyntaxKind.VariableDeclaration]: luau.VariableDeclaration;
 	[luau.SyntaxKind.ReturnStatement]: luau.ReturnStatement;
 	[luau.SyntaxKind.Comment]: luau.Comment;
+	[luau.SyntaxKind.TypeStatement]: luau.TypeStatement;
 }
 
 export interface FieldByKind {
@@ -52,7 +54,18 @@ export interface FieldByKind {
 	[luau.SyntaxKind.InterpolatedStringPart]: luau.InterpolatedStringPart;
 }
 
-export interface NodeByKind extends luau.ExpressionByKind, luau.StatementByKind, luau.FieldByKind {}
+export interface TypeByKind {
+	[luau.SyntaxKind.TypeIdentifier]: luau.TypeIdentifier;
+	[luau.SyntaxKind.TypeMixedTableField]: luau.TypeMixedTableField;
+	[luau.SyntaxKind.TypeFunction]: luau.TypeFunction;
+	[luau.SyntaxKind.TypeParameter]: luau.TypeParameter;
+	[luau.SyntaxKind.TypeMixedTable]: luau.TypeMixedTable;
+	[luau.SyntaxKind.TypeMixedTableIndexedField]: luau.TypeMixedTableIndexedField;
+	[luau.SyntaxKind.TypeTypeOf]: luau.TypeTypeOf;
+	[luau.SyntaxKind.None]: luau.None;
+}
+
+export interface NodeByKind extends luau.ExpressionByKind, luau.StatementByKind, luau.FieldByKind, TypeByKind {}
 
 export type IndexableExpression<T extends luau.SyntaxKind = luau.SyntaxKind> = {
 	[K in keyof IndexableExpressionByKind]: IndexableExpressionByKind[K]["kind"] extends T
